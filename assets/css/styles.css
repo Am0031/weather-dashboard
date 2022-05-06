@@ -1,10 +1,111 @@
+/*General styling for the whole page - root variables*/
 :root {
-  --header-text: ;
-  --extra-dark: 112b3c;
-  --dark: 1c658c;
-  --medium: 398ab9;
-  --light: D8D2CB;
-  --extra-light: EEEEEE;
-  --sunny-icon: FFC900;
-  --overcast-icon: E8F9FD;
+  --extra-dark: #112b3c;
+  --dark: #1c658c;
+  --medium: #398ab9;
+  --light: #d8d2cb;
+  --extra-light: #eeeeee;
+  --uvi-low: green;
+  --uvi-moderate: yellow;
+  --uvi-high: orange;
+  --uvi-very-high: crimson;
+  --uvi-extreme: rgb(155, 14, 42);
+}
+
+/*General styling for the whole page - root variables*/
+body {
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  min-height: 100vh;
+}
+li {
+  list-style: none;
+}
+
+/*Header and Footer styles*/
+.header-banner {
+  height: 90px;
+  width: 100%;
+  background-image: url(../images/weather-banner.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.header-title,
+.footer,
+.contact-link-text {
+  background-color: var(--dark);
+  color: var(--extra-light);
+}
+
+/*Main section styles*/
+
+/*Main section flex properties - defined here instead of with bootstrap classes so they can change for mobile view port*/
+.main {
+  display: flex;
+  flex-direction: row;
+  flex: 2;
+}
+
+.search-container {
+  width: 20%;
+}
+
+/*Main section styles - Search history*/
+.search-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/*Main section styles - Weather section*/
+.weather-container {
+  flex: 1;
+}
+.forecast {
+  flex: 1;
+}
+.forecast-card {
+  flex: 1;
+  min-width: 10rem;
+}
+
+/*Colour coding for UV Index*/
+.uvi-low {
+  background-color: var(--uvi-low);
+  color: var(--extra-light);
+}
+.uvi-moderate {
+  background-color: var(--uvi-moderate);
+  color: var(--extra-dark);
+}
+.uvi-high {
+  background-color: var(--uvi-high);
+  color: var(--extra-dark);
+}
+.uvi-very-high {
+  background-color: var(--uvi-very-high);
+  color: var(--extra-light);
+}
+.uvi-extreme {
+  background-color: var(--uvi-extreme);
+  color: var(--extra-light);
+}
+
+/*Media query for mobile screens*/
+@media screen and (max-width: 590px) {
+  .header-title {
+    font-size: 2rem;
+  }
+  .main {
+    flex-direction: column;
+    padding: 0;
+  }
+  .search-container {
+    width: auto;
+  }
+
+  .weather-container {
+    flex: 0;
+  }
 }
