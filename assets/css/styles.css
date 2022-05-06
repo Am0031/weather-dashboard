@@ -62,6 +62,40 @@ li {
 .weather-container {
   flex: 1;
 }
+.weather-title {
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.weather-text {
+  text-align: center;
+}
+.flag {
+  height: 2rem;
+}
+.flag img {
+  height: 100%;
+}
+.card-icon {
+  font-size: 8rem;
+}
+.card-body {
+  flex-direction: row-reverse;
+}
+.card-header {
+  flex-direction: row;
+}
+.card-icon,
+.icon-text {
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.card-info {
+  width: 25%;
+  text-align: left;
+}
 .forecast {
   flex: 1;
 }
@@ -101,11 +135,27 @@ li {
     flex-direction: column;
     padding: 0;
   }
+  .card-body,
+  .card-header {
+    flex-direction: column;
+  }
+  .card-info {
+    width: 100%;
+    text-align: center;
+  }
   .search-container {
     width: auto;
   }
 
   .weather-container {
     flex: 0;
+  }
+  .weather-title {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .flag {
+    justify-content: center;
   }
 }

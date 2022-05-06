@@ -68,49 +68,69 @@
             <li class="btn btn-outline-info w-100 mt-2 mb-2 text-center">
               Montreal
             </li>
+            <li class="btn btn-outline-info w-100 mt-2 mb-2 text-center">
+              Paris
+            </li>
+            <li class="btn btn-outline-info w-100 mt-2 mb-2 text-center">
+              Madrid
+            </li>
+            <li class="btn btn-outline-info w-100 mt-2 mb-2 text-center">
+              Montreal
+            </li>
           </ul>
         </div>
       </section>
-      <section class="weather-container p-2">
-        <div
-          class="weather-title d-flex flex-row flex-wrap p-2 justify-content-between"
-        >
-          <h2 class="town pl-3 pr-3 text-uppercase font-weight-bold">London</h2>
-          <h2 class="weather-text pl-3 pr-3">Today's weather conditions</h2>
-        </div>
-        <div class="current-weather text-white bg-dark m-3">
-          <div class="card-header d-flex flex-row flex-wrap">
-            <h3 class="card-text mr-5">Current Date</h3>
-            <h3 class="card-text">
-              overcast <i class="fa-solid fa-cloud"></i>
-            </h3>
+      <section class="weather-container m-3">
+        <div class="weather-title d-flex ml-1 mr-1 mt-3 mb-3">
+          <div class="flag d-flex flex-row align-items-center">
+            <img src="https://countryflagsapi.com/png/gb" />
+            <h2 class="town pl-3 pr-3 text-uppercase font-weight-bold mb-0">
+              London
+            </h2>
           </div>
-          <div class="card-body">
-            <p class="card-text">Temperature : 32 <span>&#8451;</span></p>
-            <p class="card-text">Humidity : 17%</p>
-            <p class="card-text">Wind speed : 17 MPH</p>
-            <p class="card-text">
-              UV Index :
-              <span class="uvIndex uvi-extreme pl-3 pr-3">4.2</span>
-            </p>
+
+          <h2 class="weather-text pl-3 pr-3 mb-0">
+            Today's weather conditions
+          </h2>
+        </div>
+        <div class="current-weather text-white bg-dark ml-1 mr-1 mt-3 mb-3">
+          <div class="card-header d-flex">
+            <h3 class="card-info">Current Date</h3>
+            <h3 class="card-text icon-text">overcast</h3>
+          </div>
+          <div class="card-body d-flex">
+            <h3 class="card-icon">
+              <i class="fa-solid fa-cloud"></i>
+            </h3>
+            <div class="card-info d-flex flex-column">
+              <p class="card-text">Temperature : 32 <span>&#8451;</span></p>
+              <p class="card-text">Humidity : 17%</p>
+              <p class="card-text">Wind speed : 17 MPH</p>
+              <p class="card-text">
+                UV Index :
+                <span class="uvIndex uvi-extreme pl-3 pr-3">4.2</span>
+              </p>
+            </div>
           </div>
         </div>
         <div class="forecast-container">
           <h2 class="title text-right pl-3 pr-3">5-Day Forecast</h2>
           <div
-            class="forecast d-flex flex-row flex-wrap p-3 justify-content-between"
+            class="forecast d-flex flex-row flex-wrap pt-3 pb-3 justify-content-between"
           >
             <div
               class="forecast-card d-flex flex-column align-items-center text-white bg-dark m-1"
             >
               <h4 class="card-header w-100 text-center">Date</h4>
               <div class="card-body">
-                <p class="card-title">
+                <p class="card-text text-center">
                   overcast <i class="fa-solid fa-cloud"></i>
                 </p>
-                <p class="card-text">Temp : 28 <span>&#8451;</span></p>
-                <p class="card-text">Humidity : 15%</p>
-                <p class="card-text">Wind : 15 MPH</p>
+                <p class="card-text text-center">
+                  Temp : 28 <span>&#8451;</span>
+                </p>
+                <p class="card-text text-center">Humidity : 15%</p>
+                <p class="card-text text-center">Wind : 15 MPH</p>
               </div>
             </div>
             <div
@@ -118,12 +138,14 @@
             >
               <h4 class="card-header w-100 text-center">Date</h4>
               <div class="card-body">
-                <p class="card-title">
+                <p class="card-text text-center">
                   overcast <i class="fa-solid fa-cloud"></i>
                 </p>
-                <p class="card-text">Temp : 28 <span>&#8451;</span></p>
-                <p class="card-text">Humidity : 15%</p>
-                <p class="card-text">Wind : 15 MPH</p>
+                <p class="card-text text-center">
+                  Temp : 28 <span>&#8451;</span>
+                </p>
+                <p class="card-text text-center">Humidity : 15%</p>
+                <p class="card-text text-center">Wind : 15 MPH</p>
               </div>
             </div>
             <div
@@ -131,12 +153,14 @@
             >
               <h4 class="card-header w-100 text-center">Date</h4>
               <div class="card-body">
-                <p class="card-title">
+                <p class="card-text text-center">
                   overcast <i class="fa-solid fa-cloud"></i>
                 </p>
-                <p class="card-text">Temp : 28 <span>&#8451;</span></p>
-                <p class="card-text">Humidity : 15%</p>
-                <p class="card-text">Wind : 15 MPH</p>
+                <p class="card-text text-center">
+                  Temp : 28 <span>&#8451;</span>
+                </p>
+                <p class="card-text text-center">Humidity : 15%</p>
+                <p class="card-text text-center">Wind : 15 MPH</p>
               </div>
             </div>
             <div
@@ -144,12 +168,14 @@
             >
               <h4 class="card-header w-100 text-center">Date</h4>
               <div class="card-body">
-                <p class="card-title">
+                <p class="card-text text-center">
                   overcast <i class="fa-solid fa-cloud"></i>
                 </p>
-                <p class="card-text">Temp : 28 <span>&#8451;</span></p>
-                <p class="card-text">Humidity : 15%</p>
-                <p class="card-text">Wind : 15 MPH</p>
+                <p class="card-text text-center">
+                  Temp : 28 <span>&#8451;</span>
+                </p>
+                <p class="card-text text-center">Humidity : 15%</p>
+                <p class="card-text text-center">Wind : 15 MPH</p>
               </div>
             </div>
             <div
@@ -157,12 +183,14 @@
             >
               <h4 class="card-header w-100 text-center">Date</h4>
               <div class="card-body">
-                <p class="card-title">
+                <p class="card-text text-center">
                   overcast <i class="fa-solid fa-cloud"></i>
                 </p>
-                <p class="card-text">Temp : 28 <span>&#8451;</span></p>
-                <p class="card-text">Humidity : 15%</p>
-                <p class="card-text">Wind : 15 MPH</p>
+                <p class="card-text text-center">
+                  Temp : 28 <span>&#8451;</span>
+                </p>
+                <p class="card-text text-center">Humidity : 15%</p>
+                <p class="card-text text-center">Wind : 15 MPH</p>
               </div>
             </div>
           </div>
