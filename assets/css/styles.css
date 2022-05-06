@@ -99,6 +99,9 @@ li {
 .forecast {
   flex: 1;
 }
+.forecast-title {
+  text-align: right;
+}
 .forecast-card {
   flex: 1;
   min-width: 10rem;
@@ -132,9 +135,9 @@ li {
     font-size: 2rem;
   }
   .main {
-    flex-direction: column;
     padding: 0;
   }
+  .main,
   .card-body,
   .card-header {
     flex-direction: column;
@@ -147,8 +150,8 @@ li {
     width: auto;
   }
 
-  .weather-container {
-    flex: 0;
+  .forecast-title {
+    text-align: center;
   }
   .weather-title {
     flex-direction: column;
