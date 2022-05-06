@@ -29,26 +29,69 @@
     <header class="header">
       <h1 class="header-title">Weather Dashboard</h1>
     </header>
-    <main class="main">
-      <section class="search-container">
+    <main class="main d-flex flex-row p-3">
+      <section class="search-container p-2">
         <form class="search-form">
           <label class="input-label" for="input">Enter a town name here</label>
           <input class="search-input" type="text" aria-label="Enter a town" />
           <button class="search-btn">Search</button>
         </form>
-        <div>
+        <div class="search-history">
           <h2>Recent searches</h2>
-          <ul>
+          <ul class="search-list">
             <li>Paris</li>
             <li>Madrid</li>
             <li>Montreal</li>
           </ul>
         </div>
       </section>
-      <section class="weather-container"></section>
+      <section class="weather-container p-2">
+        <div class="current-weather">
+          <h2>London</h2>
+          <p>Current Date</p>
+          <p>overcast <i class="fa-solid fa-cloud"></i></p>
+          <p>Temperature : 32 degrees</p>
+          <p>Humidity : 17%</p>
+        </div>
+        <div class="forecast-container">
+          <h2 class="title">5-Day Forecast</h2>
+          <div class="forecast d-flex flex-row p-2 justify-content-center">
+            <div class="forecast-card d-flex flex-column align-items-center">
+              <p>Date</p>
+              <p>overcast <i class="fa-solid fa-cloud"></i></p>
+              <p>Temperature : 28 degrees</p>
+              <p>Humidity : 15%</p>
+            </div>
+            <div class="forecast-card">
+              <p>Date</p>
+              <p>overcast <i class="fa-solid fa-cloud"></i></p>
+              <p>Temperature : 28 degrees</p>
+              <p>Humidity : 15%</p>
+            </div>
+            <div class="forecast-card">
+              <p>Date</p>
+              <p>overcast <i class="fa-solid fa-cloud"></i></p>
+              <p>Temperature : 28 degrees</p>
+              <p>Humidity : 15%</p>
+            </div>
+            <div class="forecast-card">
+              <p>Date</p>
+              <p>overcast <i class="fa-solid fa-cloud"></i></p>
+              <p>Temperature : 28 degrees</p>
+              <p>Humidity : 15%</p>
+            </div>
+            <div class="forecast-card">
+              <p>Date</p>
+              <p>overcast <i class="fa-solid fa-cloud"></i></p>
+              <p>Temperature : 28 degrees</p>
+              <p>Humidity : 15%</p>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
     <footer class="footer">
-      <div class="contact-link-item">
+      <div class="contact-link">
         <a class="contact-link-text" href="mailto:amelie.pira@gmail.com"
           ><i class="fa-regular fa-envelope"></i> Contact us
         </a>
