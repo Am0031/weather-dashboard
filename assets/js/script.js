@@ -553,30 +553,6 @@ const renderWeatherData = (data) => {
   renderForecastData(forecastInfo);
 };
 
-const renderCities = () => {
-  //render clear button (maybe)
-  //render ul and li from cities list
-  //add event listener on search list container
-};
-const renderSearchList = () => {
-  //get search list from local storage
-  const search = tempSearchList;
-  console.log(search);
-  console.log(search.length);
-  //if local storage is empty, then render alert message
-  if (search.length === 0) {
-    $("#search-history").append(alertMessage);
-  } else {
-    $("#search-history").append(
-      `<ul class="search-list p-0" id="search-list"></ul>`
-    );
-    search.forEach(renderListItem);
-    $("#search-history").append(clearBtn);
-  }
-
-  //else render cities
-};
-
 const addCityToSearchList = () => {
   //get search list from local storage
   //if name is already in array, do nothing
@@ -598,8 +574,30 @@ const handleCityClick = () => {
 };
 
 const handleClick = () => {
+  console.log("search container clicked");
   //if click from search form, then go to handleFormSubmit
   //if click from cities list, then go to handleCityClick
+};
+
+const renderSearchList = () => {
+  //get search list from local storage
+  const search = tempSearchList;
+  console.log(search);
+  console.log(search.length);
+  //if local storage is empty, then render alert message
+  if (search.length === 0) {
+    $("#search-history").append(alertMessage);
+  }
+  //else render list items
+  else {
+    $("#search-history").append(
+      `<ul class="search-list p-0" id="search-list"></ul>`
+    );
+    search.forEach(renderListItem);
+    $("#search-history").append(clearBtn);
+  }
+  //add event listener to search container
+  $("#search-container").click(handleClick);
 };
 
 const renderWeatherContainer = () => {
