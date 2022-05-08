@@ -9,16 +9,16 @@ let searchList = [];
 
 //UTILITY FUNCTIONS
 
-const getFromLS = () => {
-  //get from local storage
+const getFromLS = (data) => {
+  return JSON.parse(localStorage.getItem(data));
 };
 
-const writeToLS = () => {
-  //set into local storage
+const writeToLS = (key, data) => {
+  localStorage.setItem(key, JSON.stringify(data));
 };
 
 const clearLS = () => {
-  //clear local storage
+  localStorage.clear();
 };
 //END UTILITY FUNCTIONS
 
