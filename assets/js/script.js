@@ -617,7 +617,7 @@ const onReady = () => {
   console.log("start");
   //render recent search container
   renderSearchList();
-  //render weather container
+  //render weather container (add function call to test rendering)
 };
 
 //On page load
