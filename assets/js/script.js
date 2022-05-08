@@ -9,6 +9,15 @@ let searchList = [];
 //temporary variables and arrays used during development
 const tempSearchList = ["london", "madrid", "new york", "paris"];
 const tempEmptyList = [];
+const alertMessage = `<div class="alert-message w-100 mt-2 mb-2 text-center">
+No previous searches.
+</div>`;
+const clearBtn = `<button
+class="btn btn-warning w-100 mt-2 mb-2 clear-btn"
+id="clear-btn"
+>
+Clear searches
+</button>`;
 const tempCurrentWeatherFromApi = {
   coord: {
     lon: -0.13,
@@ -389,6 +398,15 @@ const clearLS = () => {
 //END UTILITY FUNCTIONS
 
 //Function...
+const renderListItem = (each) => {
+  const display = each.toUpperCase();
+  $("#search-list").append(`<li
+  class="btn btn-outline-info w-100 mt-2 mb-2 text-center"
+  id="${each}"
+  >
+  ${display}
+  </li>`);
+};
 const renderCurrentData = () => {
   //empty Current section
   //render current data with info passed
@@ -424,7 +442,20 @@ const renderCities = () => {
 };
 const renderSearchList = () => {
   //get search list from local storage
+  const search = searchList;
+  console.log(search);
+  console.log(search.length);
   //if local storage is empty, then render alert message
+  if (search.length === 0) {
+    $("#search-history").append(alertMessage);
+  } else {
+    $("#search-history").append(
+      `<ul class="search-list p-0" id="search-list"></ul>`
+    );
+    search.forEach(renderListItem);
+    $("#search-history").append(clearBtn);
+  }
+
   //else render cities
 };
 
@@ -465,6 +496,7 @@ const renderWeatherContainer = () => {
 const onReady = () => {
   console.log("start");
   //render recent search container
+  renderSearchList();
   //render weather container
 };
 
