@@ -5,6 +5,7 @@ const currentBaseUrl =
   "https://api.openweathermap.org/data/2.5/weather?units={imperial}&q={city name}&appid={API key}";
 const forecastBaseUrl =
   "https://api.openweathermap.org/data/2.5/onecall?units={imperial}&lat={lat}&lon={lon}&exclude={part}&appid={API key}";
+const flagBaseUrl = `https://countryflagsapi.com/png/`;
 let searchList = [];
 //temporary variables and arrays used during development
 const tempSearchList = ["london", "madrid", "new york", "paris"];
@@ -41,7 +42,7 @@ const tempCurrentWeatherFromApi = {
   },
   visibility: 10000,
   wind: {
-    speed: 4.1,
+    speed: 9.17,
     deg: 80,
   },
   clouds: {
@@ -417,22 +418,70 @@ const renderForecastData = () => {
   //render forecast data with info passed
 };
 
-const renderWeatherData = () => {
+const renderWeatherData = (data) => {
   //call api to fetch current weather data
   //get city name
+  const cityName = data;
   //build url
   //call api and wait for response
-  //from response, cherry pick relevant data
+  const weatherData = tempCurrentWeatherFromApi;
+
+  const currentDate = moment(weatherData.dt).format("DD/MM/YYYY");
+  const currentWeatherCondition = weatherData.weather.main;
+  const weatherIcon = weatherData.weather.icon;
+  const currentTemp = ((weatherData.main.temp + 32) * 5) / 9;
+  const currentWind = weatherData.wind.speed;
+  const currentHumidity = weatherData.main.humidity;
   //extract lon and lat
+  const lat = weatherData.coord.lat;
+  const lon = weatherData.coord.lon;
   //call api to fetch forecast data
   //get lon and lat from previous api call
+
   //build url
   //call api and wait for response
+  const forecastData = tempForecastFromApi;
+  //from response, cherry pick relevant data for current weather
+  const currentInfo = {
+    currentDate: moment(weatherData.dt).format("DD/MM/YYYY"),
+    weatherCondition: weatherData.weather.main,
+    weatherIcon: weatherData.weather.icon,
+    temperature: ((weatherData.main.temp + 32) * 5) / 9,
+    humidity: weatherData.main.humidity,
+    windSpeed: weatherData.wind.speed,
+    uvi: forecastData.daily[0].uvi,
+  };
+
+  //from response, cherry pick relevant data for forecast
+  const gatherForecastInfo = (forecastData) => {
+    const forecast = [];
+    for (let i = 1; i < forecastData.daily.length; i += 1) {
+      const forecastItem = {
+        date: forecastData.daily[i].dt,
+        weatherCondition: forecastData.daily[i].weather.main,
+        weatherIcon: forecastData.daily[i].weather.icon,
+        temparature: forecastData.daily[i].temp.max,
+        humidity: forecastData.daily[i].humidity,
+        windSpeed: forecastData.daily[i].wind_speed,
+        uvi: forecastData.daily[i].uvi,
+      };
+      forecast.push(forecastItem);
+    }
+    return forecast;
+  };
+
+  const forecastInfo = gatherForecastInfo(forecastData);
+
   //extract country code
+  const countryCode = weatherData.sys.country;
   //build url
+  const flagUrl = `flagBaseUrl${countryCode}`;
   //empty weather container
+  $("#weather-container").empty();
   //render current weather data (weather title and current weather divs)
+  renderCurrentData(currentInfo);
   //render forecast data (forecast container)
+  renderForecastData(forecastInfo);
 };
 
 const renderCities = () => {
@@ -486,10 +535,17 @@ const handleClick = () => {
 
 const renderWeatherContainer = () => {
   //get search list from local storage
+  const search = searchList;
   //if local storage is empty, then render alert message
+  if (search.length === 0) {
+    $("#weather-container").append(alertMessage);
+  }
   //else extract last city in array
-  //render current weather data
-  //render forecast data
+  else {
+    const last = search[search.length - 1];
+    //render weather data
+    renderWeatherData(last);
+  }
 };
 
 //Main function
