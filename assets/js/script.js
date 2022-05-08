@@ -70,9 +70,9 @@ const addCityToSearchList = () => {
 };
 
 const handleFormSubmit = () => {
-  //get city name from input field
+  //check input from input field
   //if empty, change class/render alert message
-  //else render Weather data
+  //else get city name and render Weather data
   //add city name to search list
   //render search list
 };

@@ -30,24 +30,31 @@
   <body class="d-flex flex-column">
     <header class="header">
       <div class="header-banner"></div>
-      <h1 class="header-title text-center p-4">Weather Dashboard</h1>
+      <h1 class="header-title text-center p-3 mb-0">Weather Dashboard</h1>
     </header>
-    <main class="main p-3">
-      <section class="search-container p-2 m-3">
-        <form class="search-form d-flex flex-column">
+    <main class="main pl-3 pr-3" id="main">
+      <section class="search-container p-2 m-3" id="search-container">
+        <form class="search-form d-flex flex-column" id="search-form">
           <label class="input-label h2" for="input">Search for a city</label>
           <input
             class="search-input"
             type="text"
+            id="input-field"
             placeholder="London"
             aria-label="Enter a town"
           />
-          <button class="btn btn-info mt-2 mb-2 search-btn">Search</button>
+          <button class="btn btn-info mt-2 mb-2 search-btn" id="search-btn">
+            Search
+          </button>
         </form>
-        <div class="search-history mt-5">
+        <div class="search-history mt-3" id="search-history">
           <h2>Recent searches</h2>
+
           <ul class="search-list p-0">
-            <li class="btn btn-outline-info w-100 mt-2 mb-2 text-center">
+            <li
+              class="btn btn-outline-info w-100 mt-2 mb-2 text-center"
+              id="paris"
+            >
               Paris
             </li>
             <li class="btn btn-outline-info w-100 mt-2 mb-2 text-center">
@@ -78,10 +85,19 @@
               Montreal
             </li>
           </ul>
+          <button
+            class="btn btn-warning w-100 mt-2 mb-2 clear-btn"
+            id="clear-btn"
+          >
+            Clear searches
+          </button>
         </div>
       </section>
-      <section class="weather-container m-3">
-        <div class="weather-title d-flex ml-1 mr-1 mt-3 mb-3">
+      <section class="weather-container m-3" id="weather-container">
+        <div
+          class="weather-title d-flex ml-1 mr-1 mt-3 mb-3"
+          id="weather-title"
+        >
           <div class="flag d-flex flex-row align-items-center">
             <img src="https://countryflagsapi.com/png/gb" />
             <h2 class="town pl-3 pr-3 text-uppercase font-weight-bold mb-0">
@@ -93,7 +109,10 @@
             Today's weather conditions
           </h2>
         </div>
-        <div class="current-weather text-white bg-dark ml-1 mr-1 mt-3 mb-3">
+        <div
+          class="current-weather text-white bg-dark ml-1 mr-1 mt-3 mb-3"
+          id="current-weather"
+        >
           <div class="card-header d-flex">
             <h3 class="card-info">Current Date</h3>
             <h3 class="card-text icon-text">overcast</h3>
@@ -113,7 +132,7 @@
             </div>
           </div>
         </div>
-        <div class="forecast-container">
+        <div class="forecast-container" id="forecast-container">
           <h2 class="forecast-title pl-3 pr-3">5-Day Forecast</h2>
           <div
             class="forecast d-flex flex-row flex-wrap pt-3 pb-3 justify-content-between"
