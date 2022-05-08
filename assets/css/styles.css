@@ -5,6 +5,7 @@
   --medium: #398ab9;
   --light: #d8d2cb;
   --extra-light: #eeeeee;
+  --alert: #fae5a5;
   --uvi-low: green;
   --uvi-moderate: yellow;
   --uvi-high: orange;
@@ -37,6 +38,9 @@ li {
 .contact-link-text {
   background-color: var(--dark);
   color: var(--extra-light);
+}
+.alert-message {
+  background-color: var(--alert);
 }
 
 /*Main section styles*/

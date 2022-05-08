@@ -71,13 +71,13 @@ const tempForecastFromApi = {
         max: 51.656,
         night: 35.492,
         eve: 42.908,
-        morn: 41.612
+        morn: 41.612,
       },
       feels_like: {
         day: 39.938,
         night: 37.616,
         eve: 38.012,
-        morn: 37.616
+        morn: 37.616,
       },
       pressure: 1020,
       humidity: 81,
@@ -89,17 +89,17 @@ const tempForecastFromApi = {
           id: 500,
           main: "Clouds",
           description: "few clouds",
-          icon: "02d"
-        }
+          icon: "02d",
+        },
       ],
       clouds: 56,
       pop: 0.2,
       rain: 0.62,
-      uvi: 1.93
+      uvi: 1.93,
     },
     {
-        dt: 1652086800,
-        sunrise: 1618282134,
+      dt: 1652086800,
+      sunrise: 1618282134,
       sunset: 1618333901,
       moonrise: 1618284960,
       moonset: 1618339740,
@@ -110,13 +110,13 @@ const tempForecastFromApi = {
         max: 51.656,
         night: 35.492,
         eve: 42.908,
-        morn: 41.612
+        morn: 41.612,
       },
       feels_like: {
         day: 39.938,
         night: 37.616,
         eve: 38.012,
-        morn: 37.616
+        morn: 37.616,
       },
       pressure: 1020,
       humidity: 81,
@@ -128,17 +128,17 @@ const tempForecastFromApi = {
           id: 500,
           main: "Clear",
           description: "clear sky",
-          icon: "01d"
-        }
+          icon: "01d",
+        },
       ],
       clouds: 56,
       pop: 0.2,
       rain: 0.62,
-      uvi: 1.93
+      uvi: 1.93,
     },
     {
-        dt: 1652173200,
-        sunrise: 1618282134,
+      dt: 1652173200,
+      sunrise: 1618282134,
       sunset: 1618333901,
       moonrise: 1618284960,
       moonset: 1618339740,
@@ -149,13 +149,13 @@ const tempForecastFromApi = {
         max: 51.656,
         night: 35.492,
         eve: 42.908,
-        morn: 41.612
+        morn: 41.612,
       },
       feels_like: {
         day: 39.938,
         night: 37.616,
         eve: 38.012,
-        morn: 37.616
+        morn: 37.616,
       },
       pressure: 1020,
       humidity: 81,
@@ -167,17 +167,17 @@ const tempForecastFromApi = {
           id: 500,
           main: "Drizzle",
           description: "light intensity drizzle",
-          icon: "09d"
-        }
+          icon: "09d",
+        },
       ],
       clouds: 56,
       pop: 0.2,
       rain: 0.62,
-      uvi: 1.93
+      uvi: 1.93,
     },
     {
-        dt: 1652259600,
-        sunrise: 1618282134,
+      dt: 1652259600,
+      sunrise: 1618282134,
       sunset: 1618333901,
       moonrise: 1618284960,
       moonset: 1618339740,
@@ -188,13 +188,13 @@ const tempForecastFromApi = {
         max: 51.656,
         night: 35.492,
         eve: 42.908,
-        morn: 41.612
+        morn: 41.612,
       },
       feels_like: {
         day: 39.938,
         night: 37.616,
         eve: 38.012,
-        morn: 37.616
+        morn: 37.616,
       },
       pressure: 1020,
       humidity: 81,
@@ -206,17 +206,17 @@ const tempForecastFromApi = {
           id: 500,
           main: "Clouds",
           description: "scattered clouds",
-          icon: "03n"
-        }
+          icon: "03n",
+        },
       ],
       clouds: 56,
       pop: 0.2,
       rain: 0.62,
-      uvi: 1.93
+      uvi: 1.93,
     },
     {
-        dt: 1652346000,
-        sunrise: 1618282134,
+      dt: 1652346000,
+      sunrise: 1618282134,
       sunset: 1618333901,
       moonrise: 1618284960,
       moonset: 1618339740,
@@ -227,13 +227,13 @@ const tempForecastFromApi = {
         max: 51.656,
         night: 35.492,
         eve: 42.908,
-        morn: 41.612
+        morn: 41.612,
       },
       feels_like: {
         day: 39.938,
         night: 37.616,
         eve: 38.012,
-        morn: 37.616
+        morn: 37.616,
       },
       pressure: 1020,
       humidity: 81,
@@ -245,17 +245,17 @@ const tempForecastFromApi = {
           id: 500,
           main: "Rain",
           description: "light rain",
-          icon: "02d"
-        }
+          icon: "02d",
+        },
       ],
       clouds: 56,
       pop: 0.2,
       rain: 0.62,
-      uvi: 1.93
+      uvi: 1.93,
     },
     {
-        dt: 1652432400,
-        sunrise: 1618282134,
+      dt: 1652432400,
+      sunrise: 1618282134,
       sunset: 1618333901,
       moonrise: 1618284960,
       moonset: 1618339740,
@@ -266,13 +266,13 @@ const tempForecastFromApi = {
         max: 51.656,
         night: 35.492,
         eve: 42.908,
-        morn: 41.612
+        morn: 41.612,
       },
       feels_like: {
         day: 39.938,
         night: 37.616,
         eve: 38.012,
-        morn: 37.616
+        morn: 37.616,
       },
       pressure: 1020,
       humidity: 81,
@@ -284,17 +284,17 @@ const tempForecastFromApi = {
           id: 500,
           main: "Rain",
           description: "light rain",
-          icon: "10d"
-        }
+          icon: "10d",
+        },
       ],
       clouds: 56,
       pop: 0.2,
       rain: 0.62,
-      uvi: 1.93
+      uvi: 1.93,
     },
     {
-        dt: 1652518800,
-        sunrise: 1618282134,
+      dt: 1652518800,
+      sunrise: 1618282134,
       sunset: 1618333901,
       moonrise: 1618284960,
       moonset: 1618339740,
@@ -305,13 +305,13 @@ const tempForecastFromApi = {
         max: 51.656,
         night: 35.492,
         eve: 42.908,
-        morn: 41.612
+        morn: 41.612,
       },
       feels_like: {
         day: 39.938,
         night: 37.616,
         eve: 38.012,
-        morn: 37.616
+        morn: 37.616,
       },
       pressure: 1020,
       humidity: 81,
@@ -323,17 +323,17 @@ const tempForecastFromApi = {
           id: 500,
           main: "Rain",
           description: "light rain",
-          icon: "10d"
-        }
+          icon: "10d",
+        },
       ],
       clouds: 56,
       pop: 0.2,
       rain: 0.62,
-      uvi: 1.93
+      uvi: 1.93,
     },
     {
-        dt: 1652605200,
-        sunrise: 1618282134,
+      dt: 1652605200,
+      sunrise: 1618282134,
       sunset: 1618333901,
       moonrise: 1618284960,
       moonset: 1618339740,
@@ -344,13 +344,13 @@ const tempForecastFromApi = {
         max: 51.656,
         night: 35.492,
         eve: 42.908,
-        morn: 41.612
+        morn: 41.612,
       },
       feels_like: {
         day: 39.938,
         night: 37.616,
         eve: 38.012,
-        morn: 37.616
+        morn: 37.616,
       },
       pressure: 1020,
       humidity: 81,
@@ -362,25 +362,15 @@ const tempForecastFromApi = {
           id: 500,
           main: "Rain",
           description: "light rain",
-          icon: "10d"
-        }
+          icon: "10d",
+        },
       ],
       clouds: 56,
       pop: 0.2,
       rain: 0.62,
-      uvi: 1.93
-    }
-    ]
-    alerts: [
-        {
-          "sender_name": "NWS Tulsa",
-          "event": "Heat Advisory",
-          "start": 1597341600,
-          "end": 1597366800,
-          "description": "...HEAT ADVISORY REMAINS IN EFFECT FROM 1 PM THIS AFTERNOON TO\n8 PM CDT THIS EVENING...\n* WHAT...Heat index values of 105 to 109 degrees expected.\n* WHERE...Creek, Okfuskee, Okmulgee, McIntosh, Pittsburg,\nLatimer, Pushmataha, and Choctaw Counties.\n* WHEN...From 1 PM to 8 PM CDT Thursday.\n* IMPACTS...The combination of hot temperatures and high\nhumidity will combine to create a dangerous situation in which\nheat illnesses are possible.",
-          "tags": [
-            "Extreme temperature value"
-            ]}]
+      uvi: 1.93,
+    },
+  ],
 };
 
 //UTILITY FUNCTIONS
