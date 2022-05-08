@@ -6,6 +6,7 @@ const currentBaseUrl =
 const forecastBaseUrl =
   "https://api.openweathermap.org/data/2.5/onecall?units={imperial}&lat={lat}&lon={lon}&exclude={part}&appid={API key}";
 const flagBaseUrl = `https://countryflagsapi.com/png/`;
+let flagUrl = "";
 let searchList = [];
 //temporary variables and arrays used during development
 const tempSearchList = ["london", "madrid", "new york", "paris"];
@@ -399,6 +400,11 @@ const clearLS = () => {
 //END UTILITY FUNCTIONS
 
 //Function...
+const getUviClass = () => {
+  //checkuvi index with iff statement
+  return "uvi-extreme";
+};
+
 const renderListItem = (each) => {
   const display = each.toUpperCase();
   $("#search-list").append(`<li
@@ -408,14 +414,75 @@ const renderListItem = (each) => {
   ${display}
   </li>`);
 };
-const renderCurrentData = () => {
+const renderCurrentData = (currentInfo) => {
   //empty Current section
   //render current data with info passed
+  $("#weather-container").append(`<div
+  class="weather-title d-flex ml-1 mr-1 mt-3 mb-3"
+  id="weather-title"
+>
+  <div class="flag d-flex flex-row align-items-center">
+    <img src="${flagUrl}" />
+    <h2 class="town pl-3 pr-3 text-uppercase font-weight-bold mb-0">
+      ${currentInfo.cityName}
+    </h2>
+  </div>
+
+  <h2 class="weather-text pl-3 pr-3 mb-0">
+    Today's weather conditions
+  </h2>
+</div>
+<div
+  class="current-weather text-white bg-dark ml-1 mr-1 mt-3 mb-3"
+  id="current-weather"
+>
+  <div class="card-header d-flex">
+    <h3 class="card-info">${currentInfo.date}</h3>
+    <h3 class="card-text icon-text">${currentInfo.weatherCondition}</h3>
+  </div>
+  <div class="card-body d-flex">
+    <h3 class="card-icon">
+    ${currentInfo.weatherIcon}
+    </h3>
+    <div class="card-info d-flex flex-column">
+      <p class="card-text">Temperature : ${currentInfo.temperature} <span>&#8451;</span></p>
+      <p class="card-text">Humidity : ${currentInfo.humidity}%</p>
+      <p class="card-text">Wind speed : ${currentInfo.windSpeed} MPH</p>
+      <p class="card-text">
+        UV Index :
+        <span class="uvIndex ${currentInfo.uviClass} pl-3 pr-3">${currentInfo.uvi}</span>
+      </p>
+    </div>
+  </div>
+</div>`);
 };
 
-const renderForecastData = () => {
+const renderForecastData = (forecastInfo) => {
   //empty forecast section
   //render forecast data with info passed
+  $("#weather-container")
+    .append(`<div class="forecast-container" id="forecast-container">
+  <h2 class="forecast-title pl-3 pr-3">5-Day Forecast</h2> <div
+  class="forecast d-flex flex-row flex-wrap pt-3 pb-3 justify-content-between" id="forecast-cards"></div>`);
+
+  const renderForecastCard = (each) => {
+    $("#forecast-cards").append(`<div
+      class="forecast-card d-flex flex-column align-items-center text-white bg-dark m-1"
+    >
+      <h4 class="card-header w-100 text-center">${each.date}</h4>
+      <div class="card-body">
+        <p class="card-text text-center">
+        ${each.weatherCondition} ${each.weatherIcon}
+        </p>
+        <p class="card-text text-center">
+          Temp : ${each.temperature} <span>&#8451;</span>
+        </p>
+        <p class="card-text text-center">Humidity : ${each.humidity}%</p>
+        <p class="card-text text-center">Wind : ${each.windSpeed} MPH</p>
+      </div>
+    </div>`);
+  };
+  forecastInfo.forEach(renderForecastCard);
 };
 
 const renderWeatherData = (data) => {
@@ -426,12 +493,6 @@ const renderWeatherData = (data) => {
   //call api and wait for response
   const weatherData = tempCurrentWeatherFromApi;
 
-  const currentDate = moment(weatherData.dt).format("DD/MM/YYYY");
-  const currentWeatherCondition = weatherData.weather.main;
-  const weatherIcon = weatherData.weather.icon;
-  const currentTemp = ((weatherData.main.temp + 32) * 5) / 9;
-  const currentWind = weatherData.wind.speed;
-  const currentHumidity = weatherData.main.humidity;
   //extract lon and lat
   const lat = weatherData.coord.lat;
   const lon = weatherData.coord.lon;
@@ -441,15 +502,19 @@ const renderWeatherData = (data) => {
   //build url
   //call api and wait for response
   const forecastData = tempForecastFromApi;
+
   //from response, cherry pick relevant data for current weather
+  const uviColor = getUviClass(forecastData.daily[0].uvi);
   const currentInfo = {
-    currentDate: moment(weatherData.dt).format("DD/MM/YYYY"),
+    cityName: weatherData.name.toUpperCase(),
+    date: moment(weatherData.dt).format("DD/MM/YYYY"),
     weatherCondition: weatherData.weather.main,
     weatherIcon: weatherData.weather.icon,
     temperature: ((weatherData.main.temp + 32) * 5) / 9,
     humidity: weatherData.main.humidity,
     windSpeed: weatherData.wind.speed,
     uvi: forecastData.daily[0].uvi,
+    uviClass: uviColor,
   };
 
   //from response, cherry pick relevant data for forecast
@@ -460,10 +525,9 @@ const renderWeatherData = (data) => {
         date: forecastData.daily[i].dt,
         weatherCondition: forecastData.daily[i].weather.main,
         weatherIcon: forecastData.daily[i].weather.icon,
-        temparature: forecastData.daily[i].temp.max,
+        temperature: forecastData.daily[i].temp.max,
         humidity: forecastData.daily[i].humidity,
         windSpeed: forecastData.daily[i].wind_speed,
-        uvi: forecastData.daily[i].uvi,
       };
       forecast.push(forecastItem);
     }
@@ -475,7 +539,7 @@ const renderWeatherData = (data) => {
   //extract country code
   const countryCode = weatherData.sys.country;
   //build url
-  const flagUrl = `flagBaseUrl${countryCode}`;
+  flagUrl = `flagBaseUrl${countryCode}`;
   //empty weather container
   $("#weather-container").empty();
   //render current weather data (weather title and current weather divs)
