@@ -20,6 +20,8 @@ id="clear-btn"
 >
 Clear searches
 </button>`;
+let currentWeatherFromApi;
+let forecastWeatherFromApi;
 const tempCurrentWeatherFromApi = {
   coord: {
     lon: -0.13,
@@ -54,7 +56,7 @@ const tempCurrentWeatherFromApi = {
     type: 1,
     id: 5091,
     message: 0.0103,
-    country: "GB",
+    country: "FR",
     sunrise: 1485762037,
     sunset: 1485794875,
   },
@@ -583,10 +585,26 @@ const handleCityClick = () => {
   //render Weather data
 };
 
-const handleClick = () => {
+const handleClick = (event) => {
   console.log("search container clicked");
-  //if click from search form, then go to handleFormSubmit
+  event.StopPropagation();
+  const target = $(event.target);
+  const targetId = $(event.target).attr("id");
+  //if click from a button then check which button
+  if (target.tagName === "BUTTON") {
+    //if button from search form, then go to handleFormSubmit
+    if (targetId == "search-btn") {
+      handleFormSubmit(event);
+    }
+    //if button from search list, then go to handleClearClick
+    else {
+      handleClearClick(event);
+    }
+  }
   //if click from cities list, then go to handleCityClick
+  else if (target.tagName === "LI") {
+    handleCityClick();
+  }
 };
 
 const renderSearchList = () => {
