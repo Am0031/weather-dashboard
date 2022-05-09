@@ -16,7 +16,7 @@ No previous searches.
 </div>`;
 const clearBtn = `<button
 class="btn btn-warning w-100 mt-2 mb-2 clear-btn"
-id="clear-btn"
+id="clear-btn" data-type="BUTTON"
 >
 Clear searches
 </button>`;
@@ -421,7 +421,7 @@ const renderListItem = (each) => {
   const display = each.toUpperCase();
   $("#search-list").append(`<li
   class="btn btn-outline-info w-100 mt-2 mb-2 text-center"
-  id="${each}"
+  id="${each}" data-type="LI"
   >
   ${display}
   </li>`);
@@ -470,7 +470,6 @@ const renderCurrentData = (currentInfo) => {
 };
 
 const renderForecastData = (forecastInfo) => {
-  //empty forecast section
   //render forecast data with info passed
   $("#weather-container")
     .append(`<div class="forecast-container" id="forecast-container">
@@ -505,7 +504,6 @@ const renderWeatherData = (data) => {
   //build url
   //call api and wait for response
   const weatherData = tempCurrentWeatherFromApi;
-  console.log(weatherData.weather[0].main);
 
   //extract lon and lat
   const lat = weatherData.coord.lat;
@@ -530,7 +528,6 @@ const renderWeatherData = (data) => {
     uvi: forecastData.daily[0].uvi,
     uviClass: uviColor,
   };
-  console.log(currentInfo);
 
   //from response, cherry pick relevant data for forecast
   const gatherForecastInfo = (forecastData) => {
@@ -546,7 +543,6 @@ const renderWeatherData = (data) => {
       };
       forecast.push(forecastItem);
     }
-    console.log(forecast);
     return forecast;
   };
 
@@ -556,7 +552,6 @@ const renderWeatherData = (data) => {
   const countryCode = weatherData.sys.country;
   //build url
   flagUrl = `${flagBaseUrl}${countryCode}`;
-  console.log(flagUrl);
   //empty weather container
   $("#weather-container").empty();
   //render current weather data (weather title and current weather divs)
@@ -572,46 +567,55 @@ const addCityToSearchList = () => {
   //set new array into local storage
 };
 
-const handleFormSubmit = () => {
+const handleFormSubmit = (event) => {
   //check input from input field
+  console.log("handling submission");
   //if empty, change class/render alert message
   //else get city name and render Weather data
   //add city name to search list
   //render search list
 };
-const handleCityClick = () => {
+const handleCityClick = (value) => {
   //if click from clear button, clear LS + empty search list + render search list
+  console.log("handling city click");
+  //else get city name from data attribute's value
+  //render Weather data
+};
+const handleClearClick = () => {
+  //if click from clear button, clear LS + empty search list + render search list
+  console.log("handling clear click");
   //else get city name from data attribute's value
   //render Weather data
 };
 
 const handleClick = (event) => {
-  console.log("search container clicked");
-  event.StopPropagation();
+  event.stopPropagation();
   const target = $(event.target);
   const targetId = $(event.target).attr("id");
+  const targetValue = $(event.target).text();
+  const targetType = $(event.target).attr("data-type");
+  console.log(target);
+  console.log(targetId, targetValue, targetType);
   //if click from a button then check which button
-  if (target.tagName === "BUTTON") {
+  if (targetType === "BUTTON") {
     //if button from search form, then go to handleFormSubmit
     if (targetId == "search-btn") {
-      handleFormSubmit(event);
+      handleFormSubmit(targetValue);
     }
     //if button from search list, then go to handleClearClick
     else {
-      handleClearClick(event);
+      handleClearClick();
     }
   }
   //if click from cities list, then go to handleCityClick
-  else if (target.tagName === "LI") {
-    handleCityClick();
+  else if (targetType === "LI") {
+    handleCityClick(targetValue);
   }
 };
 
 const renderSearchList = () => {
   //get search list from local storage
   const search = tempSearchList;
-  console.log(search);
-  console.log(search.length);
   //if local storage is empty, then render alert message
   if (search.length === 0) {
     $("#search-history").append(alertMessage);
@@ -638,7 +642,6 @@ const renderWeatherContainer = () => {
   //else extract last city in array
   else {
     const last = search[search.length - 1];
-    console.log(last);
     //render weather data
     renderWeatherData(last);
   }
@@ -646,7 +649,6 @@ const renderWeatherContainer = () => {
 
 //Main function
 const onReady = () => {
-  console.log("start");
   //render recent search container
   renderSearchList();
   //render weather container (add function call to test rendering)
