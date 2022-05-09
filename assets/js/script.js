@@ -399,6 +399,10 @@ const writeToLS = (key, data) => {
 const clearLS = () => {
   localStorage.clear();
 };
+
+const toCelsius = (fahrenheit) => {
+  return (((fahrenheit - 32) * 5) / 9).toFixed(3);
+};
 //END UTILITY FUNCTIONS
 
 //Functions to get info from API
@@ -491,7 +495,7 @@ const renderCurrentData = (currentInfo) => {
   </div>
   <div class="card-body d-flex">
     <div class="card-icon">
-      <img class="img-fluid" src=https://openweathermap.org/img/wn/${currentInfo.weatherIcon}@4x.png />
+      <img class="img-icon img-fluid" src=https://openweathermap.org/img/wn/${currentInfo.weatherIcon}@2x.png />
     </div>
     <div class="card-info d-flex flex-column">
       <p class="card-text">Temperature : ${currentInfo.temperature} <span>&#8451;</span></p>
@@ -520,7 +524,7 @@ const renderForecastData = (forecastInfo) => {
       <h4 class="card-header w-100 text-center">${each.date}</h4>
       <div class="card-body">
         <div class="card-condition d-flex flex-row justify-content-center">
-          <p class="card-text text-center text-justify mb-0">
+          <p class="card-text d-flex flex-row align-items-center mb-0">
          ${each.weatherCondition} 
           </p>
           <div><img class="img-fluid" src=https://openweathermap.org/img/wn/${each.weatherIcon}.png />
@@ -562,7 +566,7 @@ const renderWeatherData = async (data) => {
 
   //from response, cherry pick relevant data for current weather
   const uviColor = getUviClass(forecastData.daily[0].uvi);
-  const temp = (((weatherData.main.temp - 32) * 5) / 9).toFixed(3);
+  const temp = toCelsius(weatherData.main.temp);
   const currentInfo = {
     name: cityName.toUpperCase(),
     date: moment.unix(weatherData.dt).format("DD/MM/YYYY"),
@@ -580,7 +584,7 @@ const renderWeatherData = async (data) => {
   const gatherForecastInfo = (forecastData) => {
     const forecast = [];
     for (let i = 1; i < 6; i += 1) {
-      const temp = (((forecastData.daily[i].temp.max - 32) * 5) / 9).toFixed(3);
+      const temp = toCelsius(forecastData.daily[i].temp.max);
       const forecastItem = {
         date: moment.unix(forecastData.daily[i].dt).format("DD/MM/YYYY"),
         weatherCondition: forecastData.daily[i].weather[0].main,
