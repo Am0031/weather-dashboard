@@ -1,10 +1,10 @@
 //Global variables
 
 const appid = "e5cd5aafaf451f96b10b7a70a90ea75b";
-const currentBaseUrl =
-  "https://api.openweathermap.org/data/2.5/weather?units={imperial}";
+const currentWeatherBaseUrl =
+  "https://api.openweathermap.org/data/2.5/weather?units=imperial";
 const forecastBaseUrl =
-  "https://api.openweathermap.org/data/2.5/onecall?units={imperial}&lat={lat}&lon={lon}&exclude={part}&appid={API key}";
+  "https://api.openweathermap.org/data/2.5/onecall?units=imperial&exclude=current,minutely,hourly";
 const flagBaseUrl = `https://countryflagsapi.com/png/`;
 let flagUrl = "";
 let searchList = [];
@@ -403,9 +403,8 @@ const clearLS = () => {
 
 //Functions to get info from API
 const getCurrentWeatherFromApi = async (cityName) => {
-  //get city name
   //build url
-  const fullUrl = `${currentBaseUrl}&q=${cityName}&appid=${appid}`;
+  const fullUrl = `${currentWeatherBaseUrl}&q=${cityName}&appid=${appid}`;
   //call api and wait for response
   try {
     const response = await fetch(fullUrl);
@@ -415,6 +414,24 @@ const getCurrentWeatherFromApi = async (cityName) => {
       return data;
     } else {
       throw new Error("Failed to get weather data");
+    }
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+const getForecastFromApi = async (coordinates) => {
+  //build url
+  const fullUrl = `${forecastBaseUrl}&lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${appid}`;
+  //call api and wait for response
+  try {
+    const response = await fetch(fullUrl);
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data);
+      return data;
+    } else {
+      throw new Error("Failed to get forecast data");
     }
   } catch (error) {
     throw new Error(error.message);
@@ -473,9 +490,9 @@ const renderCurrentData = (currentInfo) => {
     <h3 class="card-text icon-text">${currentInfo.weatherCondition}</h3>
   </div>
   <div class="card-body d-flex">
-    <h3 class="card-icon">
-    ${currentInfo.weatherIcon}
-    </h3>
+    <div class="card-icon">
+      <img class="img-fluid" src=https://openweathermap.org/img/wn/${currentInfo.weatherIcon}@4x.png />
+    </div>
     <div class="card-info d-flex flex-column">
       <p class="card-text">Temperature : ${currentInfo.temperature} <span>&#8451;</span></p>
       <p class="card-text">Humidity : ${currentInfo.humidity}%</p>
@@ -502,9 +519,13 @@ const renderForecastData = (forecastInfo) => {
     >
       <h4 class="card-header w-100 text-center">${each.date}</h4>
       <div class="card-body">
-        <p class="card-text text-center">
-        ${each.weatherCondition} ${each.weatherIcon}
-        </p>
+        <div class="card-condition d-flex flex-row justify-content-center">
+          <p class="card-text text-center text-justify mb-0">
+         ${each.weatherCondition} 
+          </p>
+          <div><img class="img-fluid" src=https://openweathermap.org/img/wn/${each.weatherIcon}.png />
+          </div>
+          </div>
         <p class="card-text text-center">
           Temp : ${each.temperature} <span>&#8451;</span>
         </p>
@@ -516,48 +537,55 @@ const renderForecastData = (forecastInfo) => {
   forecastInfo.forEach(renderForecastCard);
 };
 
-const renderWeatherData = (data) => {
+const renderWeatherData = async (data) => {
   //call api to fetch current weather data
   //get city name
   const cityName = data;
   console.log(cityName);
   //build url
-  //call api and wait for response
-  const weatherData = tempCurrentWeatherFromApi;
+  //call api and wait for response (await)
+  const weatherData = await getCurrentWeatherFromApi(cityName);
+  console.log(weatherData);
 
   //extract lon and lat
-  const lat = weatherData.coord.lat;
-  const lon = weatherData.coord.lon;
+  const coordinates = {
+    lat: weatherData.coord.lat,
+    lon: weatherData.coord.lon,
+  };
   //call api to fetch forecast data
   //get lon and lat from previous api call
 
   //build url
-  //call api and wait for response
-  const forecastData = tempForecastFromApi;
+  //call api and wait for response (await)
+  const forecastData = await getForecastFromApi(coordinates);
+  console.log(forecastData);
 
   //from response, cherry pick relevant data for current weather
   const uviColor = getUviClass(forecastData.daily[0].uvi);
+  const temp = (((weatherData.main.temp - 32) * 5) / 9).toFixed(3);
   const currentInfo = {
     name: cityName.toUpperCase(),
     date: moment.unix(weatherData.dt).format("DD/MM/YYYY"),
     weatherCondition: weatherData.weather[0].main,
     weatherIcon: weatherData.weather[0].icon,
-    temperature: weatherData.main.temp,
+    temperature: temp,
     humidity: weatherData.main.humidity,
     windSpeed: weatherData.wind.speed,
     uvi: forecastData.daily[0].uvi,
     uviClass: uviColor,
   };
+  console.log(currentInfo);
 
   //from response, cherry pick relevant data for forecast
   const gatherForecastInfo = (forecastData) => {
     const forecast = [];
     for (let i = 1; i < 6; i += 1) {
+      const temp = (((forecastData.daily[i].temp.max - 32) * 5) / 9).toFixed(3);
       const forecastItem = {
         date: moment.unix(forecastData.daily[i].dt).format("DD/MM/YYYY"),
         weatherCondition: forecastData.daily[i].weather[0].main,
         weatherIcon: forecastData.daily[i].weather[0].icon,
-        temperature: forecastData.daily[i].temp.max,
+        temperature: temp,
         humidity: forecastData.daily[i].humidity,
         windSpeed: forecastData.daily[i].wind_speed,
       };
@@ -649,7 +677,7 @@ const renderSearchList = () => {
   $("#search-container").click(handleClick);
 };
 
-const renderWeatherContainer = () => {
+const renderWeatherContainer = async () => {
   //get search list from local storage
   const search = tempSearchList;
   //if local storage is empty, then render alert message
@@ -660,16 +688,16 @@ const renderWeatherContainer = () => {
   else {
     const last = search[search.length - 1];
     //render weather data
-    renderWeatherData(last);
+    await renderWeatherData(last);
   }
 };
 
 //Main function
-const onReady = () => {
+const onReady = async () => {
   //render recent search container
   renderSearchList();
   //render weather container (add function call to test rendering)
-  renderWeatherContainer();
+  await renderWeatherContainer();
 };
 
 //On page load

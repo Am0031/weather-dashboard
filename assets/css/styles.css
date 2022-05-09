@@ -81,7 +81,7 @@ li {
   height: 100%;
 }
 .card-icon {
-  font-size: 8rem;
+  max-height: 8rem;
 }
 .card-body {
   flex-direction: row-reverse;
