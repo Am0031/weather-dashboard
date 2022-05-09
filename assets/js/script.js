@@ -12,8 +12,29 @@ let successRender = true;
 //temporary variables and arrays used during development
 const tempSearchList = ["london", "madrid", "new york", "paris"];
 
-const alertMessage = `<div class="alert-message w-100 mt-2 mb-2 text-center">
+const alertMessage = `<form class="search-form d-flex flex-column" id="search-form">
+<label class="input-label h2" for="input">Search for a city</label>
+<input
+  class="search-input"
+  type="text"
+  name="inputField"
+  id="input-field"
+  placeholder="Enter a city"
+  aria-label="Enter a city"
+/>
+<button
+  class="btn btn-info mt-2 mb-2 search-btn"
+  id="search-btn"
+  type="button"
+>
+  Search
+</button>
+</form>
+<div class="search-history mt-3" id="search-history">
+<h2>Recent searches</h2>
+<div class="alert-message w-100 mt-2 mb-2 text-center">
 No previous searches.
+</div>
 </div>`;
 const clearBtn = `<button
 class="btn btn-warning w-100 mt-2 mb-2 clear-btn"
@@ -621,6 +642,11 @@ const addCityToSearchList = (value) => {
       if (listCitiesFromLS.indexOf(value) == -1) {
         listCitiesFromLS.push(value);
         writeToLS("listCities", listCitiesFromLS);
+        //empty search list container
+        const containerId = "search-container";
+        emptyContainer(containerId);
+        //render search list
+        renderSearchList();
       } else {
         console.log("City is already in saved list");
       }
@@ -634,17 +660,26 @@ const addCityToSearchList = (value) => {
   }
 };
 
-const handleFormClick = (value) => {
+const handleInputChange = () => {
+  const target = $(event.target);
+  if (target.hasClass("is-invalid")) {
+    target.removeClass("is-invalid");
+  }
+};
+
+const handleFormClick = () => {
   //check input from input field
   const input = $("#input-field").val().toLowerCase();
   console.log(input);
   //if empty or invalid, change class/render alert message
   if (!input || !/^[A-Za-z\s]*$/.test(input)) {
+    alert("Please enter a city");
     $("#input-field").addClass("is-invalid");
+    $("#input-field").keyup(handleInputChange);
   } else {
-    renderWeatherData(value);
+    renderWeatherData(input);
     //add city name to search list
-    addCityToSearchList(value);
+    addCityToSearchList(input);
   }
   //else get city name and render Weather data
 
@@ -671,7 +706,7 @@ const handleClearClick = () => {
   console.log("handling clear click");
   clearLS();
   //empty search list container
-  const containerId = "search-history";
+  const containerId = "search-container";
   emptyContainer(containerId);
   //render search list
   renderSearchList();
@@ -686,7 +721,7 @@ const handleClick = (event) => {
   if (target.is("button")) {
     //if button from search form, then go to handleFormSubmit
     if (targetId == "search-btn") {
-      handleFormClick(targetId);
+      handleFormClick();
     }
     //if button from search list, then go to handleClearClick
     else {
@@ -704,13 +739,35 @@ const renderSearchList = () => {
   const search = getFromLS("listCities");
   //if local storage is empty, then render alert message
   if (!search) {
-    $("#search-history").append(alertMessage);
+    $("#search-container").append(alertMessage);
   }
   //else render list items
   else {
-    $("#search-history").append(
-      `<ul class="search-list p-0" id="search-list"></ul>`
-    );
+    $("#search-container")
+      .append(`<form class="search-form d-flex flex-column" id="search-form">
+    <label class="input-label h2" for="input">Search for a city</label>
+    <input
+      class="search-input"
+      type="text"
+      name="inputField"
+      id="input-field"
+      placeholder="Enter a city"
+      aria-label="Enter a city"
+    />
+    <button
+      class="btn btn-info mt-2 mb-2 search-btn"
+      id="search-btn"
+      type="button"
+    >
+      Search
+    </button>
+    </form>
+    <div class="search-history mt-3" id="search-history">
+    <h2>Recent searches</h2>
+    <ul class="search-list p-0" id="search-list">
+    </ul>
+    </div>`);
+
     search.forEach(renderListItem);
     $("#search-history").append(clearBtn);
   }

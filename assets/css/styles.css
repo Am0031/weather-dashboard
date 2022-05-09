@@ -6,6 +6,7 @@
   --light: #d8d2cb;
   --extra-light: #eeeeee;
   --alert: #fae5a5;
+  --invalid: crimson;
   --uvi-low: green;
   --uvi-moderate: yellow;
   --uvi-high: orange;
@@ -54,6 +55,9 @@ li {
 
 .search-container {
   width: 20%;
+}
+.is-invalid {
+  border-color: var(--invalid);
 }
 
 /*Main section styles - Search history*/
