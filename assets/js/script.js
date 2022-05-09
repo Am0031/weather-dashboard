@@ -400,9 +400,19 @@ const clearLS = () => {
 //END UTILITY FUNCTIONS
 
 //Function...
-const getUviClass = () => {
+const getUviClass = (data) => {
   //checkuvi index with iff statement
-  return "uvi-extreme";
+  if (data < 3) {
+    return "uvi-low";
+  } else if (data < 6) {
+    return "uvi-moderate";
+  } else if (data < 8) {
+    return "uvi-high";
+  } else if (data < 11) {
+    return "uvi-very-high";
+  } else {
+    return "uvi-extreme";
+  }
 };
 
 const renderListItem = (each) => {
