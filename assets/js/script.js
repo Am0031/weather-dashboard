@@ -2,7 +2,7 @@
 
 const appid = "e5cd5aafaf451f96b10b7a70a90ea75b";
 const currentBaseUrl =
-  "https://api.openweathermap.org/data/2.5/weather?units={imperial}&q={city name}&appid={API key}";
+  "https://api.openweathermap.org/data/2.5/weather?units={imperial}";
 const forecastBaseUrl =
   "https://api.openweathermap.org/data/2.5/onecall?units={imperial}&lat={lat}&lon={lon}&exclude={part}&appid={API key}";
 const flagBaseUrl = `https://countryflagsapi.com/png/`;
@@ -10,13 +10,13 @@ let flagUrl = "";
 let searchList = [];
 //temporary variables and arrays used during development
 const tempSearchList = ["london", "madrid", "new york", "paris"];
-const tempEmptyList = [];
+
 const alertMessage = `<div class="alert-message w-100 mt-2 mb-2 text-center">
 No previous searches.
 </div>`;
 const clearBtn = `<button
 class="btn btn-warning w-100 mt-2 mb-2 clear-btn"
-id="clear-btn" data-type="BUTTON"
+id="clear-btn" type="button"
 >
 Clear searches
 </button>`;
@@ -401,7 +401,27 @@ const clearLS = () => {
 };
 //END UTILITY FUNCTIONS
 
-//Function...
+//Functions to get info from API
+const getCurrentWeatherFromApi = async (cityName) => {
+  //get city name
+  //build url
+  const fullUrl = `${currentBaseUrl}&q=${cityName}&appid=${appid}`;
+  //call api and wait for response
+  try {
+    const response = await fetch(fullUrl);
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data);
+      return data;
+    } else {
+      throw new Error("Failed to get weather data");
+    }
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+//Functions
 const getUviClass = (data) => {
   //checkuvi index with iff statement
   if (data < 3) {
@@ -412,7 +432,7 @@ const getUviClass = (data) => {
     return "uvi-high";
   } else if (data < 11) {
     return "uvi-very-high";
-  } else {
+  } else if (data >= 11) {
     return "uvi-extreme";
   }
 };
@@ -421,7 +441,7 @@ const renderListItem = (each) => {
   const display = each.toUpperCase();
   $("#search-list").append(`<li
   class="btn btn-outline-info w-100 mt-2 mb-2 text-center"
-  id="${each}" data-type="LI"
+  id="${each}"
   >
   ${display}
   </li>`);
@@ -567,7 +587,7 @@ const addCityToSearchList = () => {
   //set new array into local storage
 };
 
-const handleFormSubmit = (event) => {
+const handleFormClick = (value) => {
   //check input from input field
   console.log("handling submission");
   //if empty, change class/render alert message
@@ -592,15 +612,12 @@ const handleClick = (event) => {
   event.stopPropagation();
   const target = $(event.target);
   const targetId = $(event.target).attr("id");
-  const targetValue = $(event.target).text();
-  const targetType = $(event.target).attr("data-type");
-  console.log(target);
-  console.log(targetId, targetValue, targetType);
+
   //if click from a button then check which button
-  if (targetType === "BUTTON") {
+  if (target.is("button")) {
     //if button from search form, then go to handleFormSubmit
     if (targetId == "search-btn") {
-      handleFormSubmit(targetValue);
+      handleFormClick(targetId);
     }
     //if button from search list, then go to handleClearClick
     else {
@@ -608,8 +625,8 @@ const handleClick = (event) => {
     }
   }
   //if click from cities list, then go to handleCityClick
-  else if (targetType === "LI") {
-    handleCityClick(targetValue);
+  else if (target.is("li")) {
+    handleCityClick(targetId);
   }
 };
 
