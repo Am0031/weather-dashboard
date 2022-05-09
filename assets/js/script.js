@@ -8,7 +8,7 @@ const forecastBaseUrl =
 const flagBaseUrl = `https://countryflagsapi.com/png/`;
 let flagUrl = "";
 let searchList = [];
-let successRender = true;
+let letterInput = true;
 //temporary variables and arrays used during development
 const tempSearchList = ["london", "madrid", "new york", "paris"];
 
@@ -73,6 +73,7 @@ const clearLS = () => {
 
 const emptyContainer = (containerId) => {
   $(`#${containerId}`).empty();
+  $(`#${containerId}`).off("click");
 };
 
 const toCelsius = (fahrenheit) => {
@@ -89,10 +90,10 @@ const getCurrentWeatherFromApi = async (cityName) => {
     const response = await fetch(fullUrl);
     if (response.ok) {
       const data = await response.json();
-      successRender = true;
+      letterInput = true;
       return data;
     } else {
-      successRender = false;
+      letterInput = false;
       throw new Error("Failed to get weather data");
     }
   } catch (error) {
@@ -219,93 +220,98 @@ const renderForecastData = (forecastInfo) => {
 };
 
 const renderWeatherData = async (data) => {
-  //get city name
-  const cityName = data;
+  try {
+    //get city name
+    const cityName = data;
 
-  //call api and wait for response (await)
-  const weatherData = await getCurrentWeatherFromApi(cityName);
+    //call api and wait for response (await)
+    const weatherData = await getCurrentWeatherFromApi(cityName);
 
-  //extract lon and lat
-  const coordinates = {
-    lat: weatherData.coord.lat,
-    lon: weatherData.coord.lon,
-  };
+    //extract lon and lat
+    const coordinates = {
+      lat: weatherData.coord.lat,
+      lon: weatherData.coord.lon,
+    };
 
-  //call api and wait for response (await)
-  const forecastData = await getForecastFromApi(coordinates);
+    //call api and wait for response (await)
+    const forecastData = await getForecastFromApi(coordinates);
 
-  //from response, cherry pick relevant data for current weather
-  const uviColor = getUviClass(forecastData.daily[0].uvi);
-  const temp = toCelsius(weatherData.main.temp);
-  const currentInfo = {
-    name: cityName.toUpperCase(),
-    date: moment.unix(weatherData.dt).format("DD/MM/YYYY"),
-    weatherCondition: weatherData.weather[0].main,
-    weatherIcon: weatherData.weather[0].icon,
-    temperature: temp,
-    humidity: weatherData.main.humidity,
-    windSpeed: weatherData.wind.speed,
-    uvi: forecastData.daily[0].uvi,
-    uviClass: uviColor,
-  };
+    //from response, cherry pick relevant data for current weather
+    const uviColor = getUviClass(forecastData.daily[0].uvi);
+    const temp = toCelsius(weatherData.main.temp);
+    const currentInfo = {
+      name: cityName.toUpperCase(),
+      date: moment.unix(weatherData.dt).format("DD/MM/YYYY"),
+      weatherCondition: weatherData.weather[0].main,
+      weatherIcon: weatherData.weather[0].icon,
+      temperature: temp,
+      humidity: weatherData.main.humidity,
+      windSpeed: weatherData.wind.speed,
+      uvi: forecastData.daily[0].uvi,
+      uviClass: uviColor,
+    };
 
-  //from response, cherry pick relevant data for forecast
-  const gatherForecastInfo = (forecastData) => {
-    const forecast = [];
-    for (let i = 1; i < 6; i += 1) {
-      const temp = toCelsius(forecastData.daily[i].temp.max);
-      const forecastItem = {
-        date: moment.unix(forecastData.daily[i].dt).format("DD/MM/YYYY"),
-        weatherCondition: forecastData.daily[i].weather[0].main,
-        weatherIcon: forecastData.daily[i].weather[0].icon,
-        temperature: temp,
-        humidity: forecastData.daily[i].humidity,
-        windSpeed: forecastData.daily[i].wind_speed,
-      };
-      forecast.push(forecastItem);
-    }
-    return forecast;
-  };
+    //from response, cherry pick relevant data for forecast
+    const gatherForecastInfo = (forecastData) => {
+      const forecast = [];
+      for (let i = 1; i < 6; i += 1) {
+        const temp = toCelsius(forecastData.daily[i].temp.max);
+        const forecastItem = {
+          date: moment.unix(forecastData.daily[i].dt).format("DD/MM/YYYY"),
+          weatherCondition: forecastData.daily[i].weather[0].main,
+          weatherIcon: forecastData.daily[i].weather[0].icon,
+          temperature: temp,
+          humidity: forecastData.daily[i].humidity,
+          windSpeed: forecastData.daily[i].wind_speed,
+        };
+        forecast.push(forecastItem);
+      }
+      return forecast;
+    };
 
-  const forecastInfo = gatherForecastInfo(forecastData);
+    const forecastInfo = gatherForecastInfo(forecastData);
 
-  //extract country code
-  const countryCode = weatherData.sys.country;
-  //build url
-  flagUrl = `${flagBaseUrl}${countryCode}`;
-  //empty weather container
-  $("#weather-container").empty();
-  //render current weather data (weather title and current weather divs)
-  renderCurrentData(currentInfo);
-  //render forecast data (forecast container)
-  renderForecastData(forecastInfo);
+    //extract country code
+    const countryCode = weatherData.sys.country;
+    //build url
+    flagUrl = `${flagBaseUrl}${countryCode}`;
+    //empty weather container
+    $("#weather-container").empty();
+    //render current weather data (weather title and current weather divs)
+    renderCurrentData(currentInfo);
+    //render forecast data (forecast container)
+    renderForecastData(forecastInfo);
+    return true;
+  } catch (error) {
+    return false;
+  }
+  //add true/false return for use in not adding it to the search list if false
 };
 
 const addCityToSearchList = (value) => {
   //get search list from local storage
-  if (successRender) {
-    const listCitiesFromLS = getFromLS("listCities");
 
-    if (listCitiesFromLS) {
-      //if name is not already in array, push it in array and set to local storage
-      if (listCitiesFromLS.indexOf(value) == -1) {
-        listCitiesFromLS.push(value);
-        writeToLS("listCities", listCitiesFromLS);
-        //empty search list container
-        const containerId = "search-container";
-        emptyContainer(containerId);
-        //render search list
-        renderSearchList();
-      } else {
-        console.log("City is already in saved list");
-      }
+  const listCitiesFromLS = getFromLS("listCities");
+
+  if (listCitiesFromLS) {
+    //if name is not already in array, push it in array and set to local storage
+    if (listCitiesFromLS.indexOf(value) == -1) {
+      listCitiesFromLS.push(value);
+      writeToLS("listCities", listCitiesFromLS);
+      //empty search list container
+      const containerId = "search-container";
+      emptyContainer(containerId);
+      //render search list
+      renderSearchList();
+    } else {
+      console.log("City is already in saved list");
     }
-    //set up new array, push value in array and set into local storage
-    else {
-      const newListCities = [];
-      newListCities.push(value);
-      writeToLS("listCities", newListCities);
-    }
+  }
+  //set up new array, push value in array and set into local storage
+  else {
+    const newListCities = [];
+    newListCities.push(value);
+    writeToLS("listCities", newListCities);
   }
 };
 
@@ -317,7 +323,7 @@ const handleInputChange = () => {
   }
 };
 
-const handleFormClick = () => {
+const handleFormClick = async () => {
   //check input from input field
   const input = $("#input-field").val().toLowerCase();
   console.log(input);
@@ -328,22 +334,12 @@ const handleFormClick = () => {
     $("#input-field").addClass("is-invalid");
     $("#input-field").keyup(handleInputChange);
   } else {
-    renderWeatherData(input);
-    //add city name to search list
-    addCityToSearchList(input);
+    const result = await renderWeatherData(input);
+    //add city name to search list only iof rendering went well
+    if (result) {
+      addCityToSearchList(input);
+    }
   }
-  //else get city name and render Weather data
-
-  //render search list
-
-  //validate technique -> look into it:
-  // $("#input-field").validate({
-  //   rules: {
-  //     inputField: {
-  //       required: true,
-  //     },
-  //   },
-  // });
 };
 const handleCityClick = (value) => {
   //if click if from city in saved list
@@ -427,6 +423,7 @@ const renderSearchList = () => {
   }
   //add event listener to search container
   $("#search-container").click(handleClick);
+  //look where we might need to turn the click event off??
 };
 
 const renderWeatherContainer = async () => {
