@@ -400,6 +400,10 @@ const clearLS = () => {
   localStorage.clear();
 };
 
+const emptyContainer = (containerId) => {
+  $(`#${containerId}`).empty();
+};
+
 const toCelsius = (fahrenheit) => {
   return (((fahrenheit - 32) * 5) / 9).toFixed(3);
 };
@@ -622,10 +626,26 @@ const addCityToSearchList = () => {
 const handleFormClick = (value) => {
   //check input from input field
   console.log("handling submission");
-  //if empty, change class/render alert message
+  const input = $("#input-field").val();
+  //if empty or invalid, change class/render alert message
+  if (!input || !/^[A-Za-z\s]*$/.test(input)) {
+    $("#input-field").addClass("is-invalid");
+  } else {
+    renderWeatherData(value);
+    const listCities = getFromLS();
+  }
   //else get city name and render Weather data
   //add city name to search list
   //render search list
+
+  //validate technique -> look into it:
+  // $("#input-field").validate({
+  //   rules: {
+  //     inputField: {
+  //       required: true,
+  //     },
+  //   },
+  // });
 };
 const handleCityClick = (value) => {
   //if click from clear button, clear LS + empty search list + render search list
@@ -636,8 +656,12 @@ const handleCityClick = (value) => {
 const handleClearClick = () => {
   //if click from clear button, clear LS + empty search list + render search list
   console.log("handling clear click");
-  //else get city name from data attribute's value
-  //render Weather data
+  clearLS();
+  //empty search list container
+  const containerId = "search-history";
+  emptyContainer(containerId);
+  //render search list
+  renderSearchList();
 };
 
 const handleClick = (event) => {
