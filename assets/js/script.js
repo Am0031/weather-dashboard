@@ -8,6 +8,7 @@ const forecastBaseUrl =
 const flagBaseUrl = `https://countryflagsapi.com/png/`;
 let flagUrl = "";
 let searchList = [];
+let successRender = true;
 //temporary variables and arrays used during development
 const tempSearchList = ["london", "madrid", "new york", "paris"];
 
@@ -409,7 +410,7 @@ const toCelsius = (fahrenheit) => {
 };
 //END UTILITY FUNCTIONS
 
-//Functions to get info from API
+//Async Function - call api to fetch current weather data (with city name from input field)
 const getCurrentWeatherFromApi = async (cityName) => {
   //build url
   const fullUrl = `${currentWeatherBaseUrl}&q=${cityName}&appid=${appid}`;
@@ -418,9 +419,10 @@ const getCurrentWeatherFromApi = async (cityName) => {
     const response = await fetch(fullUrl);
     if (response.ok) {
       const data = await response.json();
-      console.log(data);
+      successRender = true;
       return data;
     } else {
+      successRender = false;
       throw new Error("Failed to get weather data");
     }
   } catch (error) {
@@ -428,6 +430,7 @@ const getCurrentWeatherFromApi = async (cityName) => {
   }
 };
 
+//Async Function - call api to fetch forecast data (with lon and lat from previous api call)
 const getForecastFromApi = async (coordinates) => {
   //build url
   const fullUrl = `${forecastBaseUrl}&lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${appid}`;
@@ -546,27 +549,20 @@ const renderForecastData = (forecastInfo) => {
 };
 
 const renderWeatherData = async (data) => {
-  //call api to fetch current weather data
   //get city name
   const cityName = data;
-  console.log(cityName);
-  //build url
+
   //call api and wait for response (await)
   const weatherData = await getCurrentWeatherFromApi(cityName);
-  console.log(weatherData);
 
   //extract lon and lat
   const coordinates = {
     lat: weatherData.coord.lat,
     lon: weatherData.coord.lon,
   };
-  //call api to fetch forecast data
-  //get lon and lat from previous api call
 
-  //build url
   //call api and wait for response (await)
   const forecastData = await getForecastFromApi(coordinates);
-  console.log(forecastData);
 
   //from response, cherry pick relevant data for current weather
   const uviColor = getUviClass(forecastData.daily[0].uvi);
@@ -582,7 +578,6 @@ const renderWeatherData = async (data) => {
     uvi: forecastData.daily[0].uvi,
     uviClass: uviColor,
   };
-  console.log(currentInfo);
 
   //from response, cherry pick relevant data for forecast
   const gatherForecastInfo = (forecastData) => {
@@ -616,26 +611,43 @@ const renderWeatherData = async (data) => {
   renderForecastData(forecastInfo);
 };
 
-const addCityToSearchList = () => {
+const addCityToSearchList = (value) => {
   //get search list from local storage
-  //if name is already in array, do nothing
-  //else, add name to array
-  //set new array into local storage
+  if (successRender) {
+    const listCitiesFromLS = getFromLS("listCities");
+
+    if (listCitiesFromLS) {
+      //if name is not already in array, push it in array and set to local storage
+      if (listCitiesFromLS.indexOf(value) == -1) {
+        listCitiesFromLS.push(value);
+        writeToLS("listCities", listCitiesFromLS);
+      } else {
+        console.log("City is already in saved list");
+      }
+    }
+    //set up new array, push value in array and set into local storage
+    else {
+      const newListCities = [];
+      newListCities.push(value);
+      writeToLS("listCities", newListCities);
+    }
+  }
 };
 
 const handleFormClick = (value) => {
   //check input from input field
-  console.log("handling submission");
-  const input = $("#input-field").val();
+  const input = $("#input-field").val().toLowerCase();
+  console.log(input);
   //if empty or invalid, change class/render alert message
   if (!input || !/^[A-Za-z\s]*$/.test(input)) {
     $("#input-field").addClass("is-invalid");
   } else {
     renderWeatherData(value);
-    const listCities = getFromLS();
+    //add city name to search list
+    addCityToSearchList(value);
   }
   //else get city name and render Weather data
-  //add city name to search list
+
   //render search list
 
   //validate technique -> look into it:
@@ -648,11 +660,12 @@ const handleFormClick = (value) => {
   // });
 };
 const handleCityClick = (value) => {
-  //if click from clear button, clear LS + empty search list + render search list
+  //if click if from city in saved list
   console.log("handling city click");
-  //else get city name from data attribute's value
   //render Weather data
+  renderWeatherData(value);
 };
+
 const handleClearClick = () => {
   //if click from clear button, clear LS + empty search list + render search list
   console.log("handling clear click");
@@ -688,9 +701,9 @@ const handleClick = (event) => {
 
 const renderSearchList = () => {
   //get search list from local storage
-  const search = tempSearchList;
+  const search = getFromLS("listCities");
   //if local storage is empty, then render alert message
-  if (search.length === 0) {
+  if (!search) {
     $("#search-history").append(alertMessage);
   }
   //else render list items
@@ -707,9 +720,10 @@ const renderSearchList = () => {
 
 const renderWeatherContainer = async () => {
   //get search list from local storage
-  const search = tempSearchList;
+  const search = getFromLS("listCities");
+  console.log(search);
   //if local storage is empty, then render alert message
-  if (search.length === 0) {
+  if (!search) {
     $("#weather-container").append(alertMessage);
   }
   //else extract last city in array
