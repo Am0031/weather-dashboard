@@ -59,6 +59,11 @@ li {
 .is-invalid {
   border-color: var(--invalid);
 }
+.invalid-input-message {
+  color: var(--invalid);
+  font-size: 0.6rem;
+  font-style: italic;
+}
 
 /*Main section styles - Search history*/
 .search-list {

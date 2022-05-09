@@ -22,6 +22,9 @@ const alertMessage = `<form class="search-form d-flex flex-column" id="search-fo
   placeholder="Enter a city"
   aria-label="Enter a city"
 />
+<p class="invalid-input-message w-100 mt-2 mb-2 text-center invisible" id="invalid-input">
+Please enter a valid city name.
+</p>
 <button
   class="btn btn-info mt-2 mb-2 search-btn"
   id="search-btn"
@@ -42,6 +45,11 @@ id="clear-btn" type="button"
 >
 Clear searches
 </button>`;
+
+const invalidInputMessage = `<div class="alert-message w-100 mt-2 mb-2 text-center" id="invalid-input">
+Please enter a valid city name.
+</div>`;
+
 let currentWeatherFromApi;
 let forecastWeatherFromApi;
 const tempCurrentWeatherFromApi = {
@@ -664,6 +672,7 @@ const handleInputChange = () => {
   const target = $(event.target);
   if (target.hasClass("is-invalid")) {
     target.removeClass("is-invalid");
+    $("#invalid-input").addClass("invisible");
   }
 };
 
@@ -674,6 +683,7 @@ const handleFormClick = () => {
   //if empty or invalid, change class/render alert message
   if (!input || !/^[A-Za-z\s]*$/.test(input)) {
     alert("Please enter a city");
+    $("#invalid-input").removeClass("invisible");
     $("#input-field").addClass("is-invalid");
     $("#input-field").keyup(handleInputChange);
   } else {
@@ -754,6 +764,9 @@ const renderSearchList = () => {
       placeholder="Enter a city"
       aria-label="Enter a city"
     />
+    <p class="invalid-input-message w-100 mt-2 mb-2 text-center invisible" id="invalid-input">
+    Please enter a valid city name.
+    </p>
     <button
       class="btn btn-info mt-2 mb-2 search-btn"
       id="search-btn"
