@@ -4,7 +4,7 @@ const appid = "e5cd5aafaf451f96b10b7a70a90ea75b";
 const currentWeatherBaseUrl =
   "https://api.openweathermap.org/data/2.5/weather?units=imperial";
 const forecastBaseUrl =
-  "https://api.openweathermap.org/data/2.5/onecall?units=imperial&exclude=current,minutely,hourly";
+  "https://api.openweathermap.org/data/2.5/onecall?units=imperial&exclude=minutely,hourly";
 const flagBaseUrl = `https://countryflagsapi.com/png/`;
 let flagUrl = "";
 let searchList = [];
@@ -39,6 +39,34 @@ Please enter a valid city name.
 No previous searches.
 </div>
 </div>`;
+
+const searchContainerBase = `<form class="search-form d-flex flex-column" id="search-form">
+<label class="input-label h2" for="input">Search for a city</label>
+<input
+  class="search-input"
+  type="text"
+  name="inputField"
+  id="input-field"
+  placeholder="Enter a city"
+  aria-label="Enter a city"
+/>
+<p class="invalid-input-message w-100 mt-2 mb-2 text-center invisible" id="invalid-input">
+Please enter a valid city name.
+</p>
+<button
+  class="btn btn-info mt-2 mb-2 search-btn"
+  id="search-btn"
+  type="button"
+>
+  Search
+</button>
+</form>
+<div class="search-history mt-3" id="search-history">
+<h2>Recent searches</h2>
+<ul class="search-list p-0" id="search-list">
+</ul>
+</div>`;
+
 const clearBtn = `<button
 class="btn btn-warning w-100 mt-2 mb-2 clear-btn"
 id="clear-btn" type="button"
@@ -83,11 +111,14 @@ const toCelsius = (fahrenheit) => {
 
 //Async Function - call api to fetch current weather data (with city name from input field)
 const getCurrentWeatherFromApi = async (cityName) => {
+  debugger;
   //build url
   const fullUrl = `${currentWeatherBaseUrl}&q=${cityName}&appid=${appid}`;
+  console.log(fullUrl);
   //call api and wait for response
   try {
     const response = await fetch(fullUrl);
+    console.log(response);
     if (response.ok) {
       const data = await response.json();
       letterInput = true;
@@ -145,8 +176,8 @@ const renderListItem = (each) => {
   ${display}
   </li>`);
 };
+
 const renderCurrentData = (currentInfo) => {
-  //empty Current section
   //render current data with info passed
   $("#weather-container").append(`<div
   class="weather-title d-flex ml-1 mr-1 mt-3 mb-3"
@@ -173,15 +204,21 @@ const renderCurrentData = (currentInfo) => {
   </div>
   <div class="card-body d-flex">
     <div class="card-icon">
-      <img class="img-icon img-fluid" src=https://openweathermap.org/img/wn/${currentInfo.weatherIcon}@2x.png />
+      <img class="img-icon img-fluid" src=https://openweathermap.org/img/wn/${
+        currentInfo.weatherIcon
+      }@2x.png />
     </div>
     <div class="card-info d-flex flex-column">
-      <p class="card-text">Temperature : ${currentInfo.temperature} <span>&#8451;</span></p>
+      <p class="card-text">Temperature : ${
+        currentInfo.temperature
+      } <span>&#8451;</span></p>
       <p class="card-text">Humidity : ${currentInfo.humidity}%</p>
       <p class="card-text">Wind speed : ${currentInfo.windSpeed} MPH</p>
       <p class="card-text">
         UV Index :
-        <span class="uvIndex ${currentInfo.uviClass} pl-3 pr-3">${currentInfo.uvi}</span>
+        <span class="uvIndex ${getUviClass(currentInfo.uvi)} pl-3 pr-3">${
+    currentInfo.uvi
+  }</span>
       </p>
     </div>
   </div>
@@ -189,6 +226,7 @@ const renderCurrentData = (currentInfo) => {
 };
 
 const renderForecastData = (forecastInfo) => {
+  debugger;
   //render forecast data with info passed
   $("#weather-container")
     .append(`<div class="forecast-container" id="forecast-container">
@@ -203,9 +241,11 @@ const renderForecastData = (forecastInfo) => {
       <div class="card-body">
         <div class="card-condition d-flex flex-row justify-content-center">
           <p class="card-text d-flex flex-row align-items-center mb-0">
-         ${each.weatherCondition} 
+         ${each.weatherCondition}
           </p>
-          <div><img class="img-fluid" src=https://openweathermap.org/img/wn/${each.weatherIcon}.png />
+          <div><img class="img-fluid" src=https://openweathermap.org/img/wn/${
+            each.weatherIcon
+          }.png />
           </div>
           </div>
         <p class="card-text text-center">
@@ -213,70 +253,91 @@ const renderForecastData = (forecastInfo) => {
         </p>
         <p class="card-text text-center">Humidity : ${each.humidity}%</p>
         <p class="card-text text-center">Wind : ${each.windSpeed} MPH</p>
+        <p class="card-text text-center">
+        UV Index :
+        <span class="uvIndex ${getUviClass(each.uvi)} pl-3 pr-3">${
+      each.uvi
+    }</span>
+        </p>
       </div>
     </div>`);
   };
+
   forecastInfo.forEach(renderForecastCard);
+};
+
+const getCoordinates = (weatherData) => {
+  const coordinates = {
+    lat: weatherData.coord.lat,
+    lon: weatherData.coord.lon,
+  };
+  return coordinates;
+};
+
+const getCityName = (weatherData) => {
+  return weatherData.name;
+};
+
+const gatherCurrentInfo = (cityName, data) => {
+  const currentInfo = {
+    name: cityName.toUpperCase(),
+    date: moment.unix(data.current.dt).format("DD/MM/YYYY"),
+    weatherCondition: data.current.weather[0].main,
+    weatherIcon: data.current.weather[0].icon,
+    temperature: toCelsius(data.current.temp),
+    humidity: data.current.humidity,
+    windSpeed: data.current.wind_speed,
+    uvi: data.current.uvi,
+  };
+  return currentInfo;
+};
+
+const gatherForecastInfo = (forecastData) => {
+  const forecast = [];
+  for (let i = 1; i < 6; i += 1) {
+    const forecastItem = {
+      date: moment.unix(forecastData.daily[i].dt).format("DD/MM/YYYY"),
+      weatherCondition: forecastData.daily[i].weather[0].main,
+      weatherIcon: forecastData.daily[i].weather[0].icon,
+      temperature: toCelsius(forecastData.daily[i].temp.day),
+      humidity: forecastData.daily[i].humidity,
+      windSpeed: forecastData.daily[i].wind_speed,
+      uvi: forecastData.daily[i].uvi,
+    };
+    forecast.push(forecastItem);
+  }
+  return forecast;
+};
+
+const getCountryFlag = (countryCode) => {
+  //pass country code to build url
+  flagUrl = `${flagBaseUrl}${countryCode}`;
 };
 
 const renderWeatherData = async (data) => {
   try {
-    //get city name
-    const cityName = data;
-
     //call api and wait for response (await)
-    const weatherData = await getCurrentWeatherFromApi(cityName);
+    const weatherData = await getCurrentWeatherFromApi(data);
 
     //extract lon and lat
-    const coordinates = {
-      lat: weatherData.coord.lat,
-      lon: weatherData.coord.lon,
-    };
+    const coordinates = getCoordinates(weatherData);
+    const cityName = getCityName(weatherData);
 
     //call api and wait for response (await)
     const forecastData = await getForecastFromApi(coordinates);
 
     //from response, cherry pick relevant data for current weather
-    const uviColor = getUviClass(forecastData.daily[0].uvi);
-    const temp = toCelsius(weatherData.main.temp);
-    const currentInfo = {
-      name: cityName.toUpperCase(),
-      date: moment.unix(weatherData.dt).format("DD/MM/YYYY"),
-      weatherCondition: weatherData.weather[0].main,
-      weatherIcon: weatherData.weather[0].icon,
-      temperature: temp,
-      humidity: weatherData.main.humidity,
-      windSpeed: weatherData.wind.speed,
-      uvi: forecastData.daily[0].uvi,
-      uviClass: uviColor,
-    };
+    const currentInfo = gatherCurrentInfo(cityName, forecastData);
 
     //from response, cherry pick relevant data for forecast
-    const gatherForecastInfo = (forecastData) => {
-      const forecast = [];
-      for (let i = 1; i < 6; i += 1) {
-        const temp = toCelsius(forecastData.daily[i].temp.max);
-        const forecastItem = {
-          date: moment.unix(forecastData.daily[i].dt).format("DD/MM/YYYY"),
-          weatherCondition: forecastData.daily[i].weather[0].main,
-          weatherIcon: forecastData.daily[i].weather[0].icon,
-          temperature: temp,
-          humidity: forecastData.daily[i].humidity,
-          windSpeed: forecastData.daily[i].wind_speed,
-        };
-        forecast.push(forecastItem);
-      }
-      return forecast;
-    };
-
     const forecastInfo = gatherForecastInfo(forecastData);
 
-    //extract country code
-    const countryCode = weatherData.sys.country;
-    //build url
-    flagUrl = `${flagBaseUrl}${countryCode}`;
+    //from response, extract country code for flag
+    getCountryFlag(weatherData.sys.country);
+
     //empty weather container
     $("#weather-container").empty();
+
     //render current weather data (weather title and current weather divs)
     renderCurrentData(currentInfo);
     //render forecast data (forecast container)
@@ -381,55 +442,22 @@ const handleClick = (event) => {
   }
 };
 
-const renderSearchList = () => {
-  //get search list from local storage
-  const search = getFromLS("listCities");
+const renderSearchList = (search) => {
   //if local storage is empty, then render alert message
   if (!search) {
     $("#search-container").append(searchAlertMessage);
   }
   //else render list items
   else {
-    $("#search-container")
-      .append(`<form class="search-form d-flex flex-column" id="search-form">
-    <label class="input-label h2" for="input">Search for a city</label>
-    <input
-      class="search-input"
-      type="text"
-      name="inputField"
-      id="input-field"
-      placeholder="Enter a city"
-      aria-label="Enter a city"
-    />
-    <p class="invalid-input-message w-100 mt-2 mb-2 text-center invisible" id="invalid-input">
-    Please enter a valid city name.
-    </p>
-    <button
-      class="btn btn-info mt-2 mb-2 search-btn"
-      id="search-btn"
-      type="button"
-    >
-      Search
-    </button>
-    </form>
-    <div class="search-history mt-3" id="search-history">
-    <h2>Recent searches</h2>
-    <ul class="search-list p-0" id="search-list">
-    </ul>
-    </div>`);
-
+    $("#search-container").append(searchContainerBase);
     search.forEach(renderListItem);
     $("#search-history").append(clearBtn);
   }
   //add event listener to search container
   $("#search-container").click(handleClick);
-  //look where we might need to turn the click event off??
 };
 
-const renderWeatherContainer = async () => {
-  //get search list from local storage
-  const search = getFromLS("listCities");
-  console.log(search);
+const renderWeatherContainer = async (search) => {
   //if local storage is empty, then render alert message
   if (!search) {
     $("#weather-container").append(weatherAlertMessage);
@@ -437,17 +465,19 @@ const renderWeatherContainer = async () => {
   //else extract last city in array
   else {
     const last = search[search.length - 1];
-    //render weather data
+    //render weather data for last city in list
     await renderWeatherData(last);
   }
 };
 
 //Main function
 const onReady = async () => {
+  //check local storage
+  const existingLS = getFromLS("listCities");
   //render recent search container
-  renderSearchList();
+  renderSearchList(existingLS);
   //render weather container (add function call to test rendering)
-  await renderWeatherContainer();
+  await renderWeatherContainer(existingLS);
 };
 
 //On page load
