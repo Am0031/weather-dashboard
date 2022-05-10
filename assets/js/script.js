@@ -7,7 +7,7 @@ const forecastBaseUrl =
   "https://api.openweathermap.org/data/2.5/onecall?units=imperial&exclude=minutely,hourly";
 const flagBaseUrl = `https://countryflagsapi.com/png/`;
 let flagUrl = "";
-let searchList = [];
+
 let letterInput = true;
 
 const searchAlertMessage = `<form class="search-form d-flex flex-column" id="search-form">
