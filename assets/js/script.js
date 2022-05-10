@@ -386,24 +386,26 @@ const handleInputChange = () => {
   }
 };
 
+const highlightInputField = () => {
+  $("#invalid-input").removeClass("invisible");
+  $("#input-field").addClass("is-invalid");
+  $("#input-field").keyup(handleInputChange);
+};
+
 const handleFormClick = async () => {
   //check input from input field
   const input = $("#input-field").val().toLowerCase();
   console.log(input);
   //if empty or invalid, change class/render alert message
   if (!input || !/^[A-Za-z\s]*$/.test(input)) {
-    $("#invalid-input").removeClass("invisible");
-    $("#input-field").addClass("is-invalid");
-    $("#input-field").keyup(handleInputChange);
+    highlightInputField();
   } else {
     const result = await renderWeatherData(input);
     //add city name to search list only iof rendering went well
     if (result) {
       addCityToSearchList(input);
     } else {
-      $("#invalid-input").removeClass("invisible");
-      $("#input-field").addClass("is-invalid");
-      $("#input-field").keyup(handleInputChange);
+      highlightInputField();
     }
   }
 };
