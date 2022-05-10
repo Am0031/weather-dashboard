@@ -9,8 +9,6 @@ const flagBaseUrl = `https://countryflagsapi.com/png/`;
 let flagUrl = "";
 let searchList = [];
 let letterInput = true;
-//temporary variables and arrays used during development
-const tempSearchList = ["london", "madrid", "new york", "paris"];
 
 const searchAlertMessage = `<form class="search-form d-flex flex-column" id="search-form">
 <label class="input-label h2" for="input">Search for a city</label>
