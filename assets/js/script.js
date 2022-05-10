@@ -111,14 +111,12 @@ const toCelsius = (fahrenheit) => {
 
 //Async Function - call api to fetch current weather data (with city name from input field)
 const getCurrentWeatherFromApi = async (cityName) => {
-  debugger;
   //build url
   const fullUrl = `${currentWeatherBaseUrl}&q=${cityName}&appid=${appid}`;
-  console.log(fullUrl);
   //call api and wait for response
   try {
     const response = await fetch(fullUrl);
-    console.log(response);
+
     if (response.ok) {
       const data = await response.json();
       letterInput = true;
@@ -226,7 +224,6 @@ const renderCurrentData = (currentInfo) => {
 };
 
 const renderForecastData = (forecastInfo) => {
-  debugger;
   //render forecast data with info passed
   $("#weather-container")
     .append(`<div class="forecast-container" id="forecast-container">
@@ -363,7 +360,7 @@ const addCityToSearchList = (value) => {
       const containerId = "search-container";
       emptyContainer(containerId);
       //render search list
-      renderSearchList();
+      renderSearchList(listCitiesFromLS);
     } else {
       console.log("City is already in saved list");
     }
@@ -373,6 +370,11 @@ const addCityToSearchList = (value) => {
     const newListCities = [];
     newListCities.push(value);
     writeToLS("listCities", newListCities);
+    //empty search list container
+    const containerId = "search-container";
+    emptyContainer(containerId);
+    //render search list
+    renderSearchList(newListCities);
   }
 };
 
@@ -390,7 +392,6 @@ const handleFormClick = async () => {
   console.log(input);
   //if empty or invalid, change class/render alert message
   if (!input || !/^[A-Za-z\s]*$/.test(input)) {
-    alert("Please enter a city");
     $("#invalid-input").removeClass("invisible");
     $("#input-field").addClass("is-invalid");
     $("#input-field").keyup(handleInputChange);
@@ -399,6 +400,10 @@ const handleFormClick = async () => {
     //add city name to search list only iof rendering went well
     if (result) {
       addCityToSearchList(input);
+    } else {
+      $("#invalid-input").removeClass("invisible");
+      $("#input-field").addClass("is-invalid");
+      $("#input-field").keyup(handleInputChange);
     }
   }
 };
@@ -411,7 +416,6 @@ const handleCityClick = (value) => {
 
 const handleClearClick = () => {
   //if click from clear button, clear LS + empty search list + render search list
-  console.log("handling clear click");
   clearLS();
   //empty search list container
   const containerId = "search-container";
