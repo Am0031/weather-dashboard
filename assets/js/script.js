@@ -12,7 +12,7 @@ let letterInput = true;
 
 const searchAlertMessage = `<div class="search-history mt-3" id="search-history">
 <h2>Recent searches</h2>
-<div class="alert-message alert-warning w-100 mt-2 mb-2 text-center">
+<div class="warning-message alert-warning w-100 mt-2 mb-2 text-center">
 No previous searches.
 </div>
 </div>`;
@@ -52,7 +52,7 @@ id="clear-btn" type="button"
 Clear searches
 </button>`;
 
-const weatherAlertMessage = `<div class="alert-message alert-warning w-100 mt-2 mb-2 text-center">
+const weatherAlertMessage = `<div class="warning-message alert-warning w-100 mt-2 mb-2 text-center">
 No previous searches.
 </div>`;
 
@@ -326,30 +326,30 @@ const renderWeatherData = async (data) => {
 const addCityToSearchList = (value) => {
   //get search list from local storage
 
-  const listCitiesFromLS = getFromLS("listCities");
+  const searchCitiesFromLS = getFromLS("searchCities");
 
-  if (listCitiesFromLS) {
+  if (searchCitiesFromLS) {
     //if name is not already in array, push it in array and set to local storage
-    if (listCitiesFromLS.indexOf(value) == -1) {
-      listCitiesFromLS.push(value);
-      writeToLS("listCities", listCitiesFromLS);
+    if (searchCitiesFromLS.indexOf(value) == -1) {
+      searchCitiesFromLS.push(value);
+      writeToLS("searchCities", searchCitiesFromLS);
       //empty search list container
       const containerId = "search-history";
       removeContainer(containerId);
       //render search list
-      renderSearchList(listCitiesFromLS);
+      renderSearchList(searchCitiesFromLS);
     }
   }
   //set up new array, push value in array and set into local storage
   else {
-    const newListCities = [];
-    newListCities.push(value);
-    writeToLS("listCities", newListCities);
+    const newSearchCities = [];
+    newSearchCities.push(value);
+    writeToLS("searchCities", newSearchCities);
     //empty search list container
     const containerId = "search-history";
     removeContainer(containerId);
     //render search list
-    renderSearchList(newListCities);
+    renderSearchList(newSearchCities);
   }
 };
 
@@ -452,7 +452,7 @@ const renderWeatherContainer = async (search) => {
 //Main function
 const onReady = async () => {
   //check local storage
-  const existingLS = getFromLS("listCities");
+  const existingLS = getFromLS("searchCities");
   //render search form
   renderSearchForm();
   //render recent search container
