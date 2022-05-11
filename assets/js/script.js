@@ -174,7 +174,7 @@ const renderCurrentData = (currentInfo) => {
   id="current-weather"
 >
   <div class="card-header d-flex">
-    <h3 class="card-info">${currentInfo.date}</h3>
+    <h3 class="card-date">${currentInfo.date}</h3>
     <h3 class="card-text icon-text">${currentInfo.weatherCondition}</h3>
   </div>
   <div class="card-body d-flex">
