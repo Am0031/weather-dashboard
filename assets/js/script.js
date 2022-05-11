@@ -255,7 +255,7 @@ const getCityName = (weatherData) => {
 const gatherCurrentInfo = (cityName, data) => {
   const currentInfo = {
     name: cityName.toUpperCase(),
-    date: moment.unix(data.current.dt).format("DD/MM/YYYY"),
+    date: moment.unix(data.current.dt).format("dddd DD-MM-YYYY"),
     weatherCondition: data.current.weather[0].main,
     weatherIcon: data.current.weather[0].icon,
     temperature: toCelsius(data.current.temp),
@@ -270,7 +270,7 @@ const gatherForecastInfo = (forecastData) => {
   const forecast = [];
   for (let i = 1; i < 6; i += 1) {
     const forecastItem = {
-      date: moment.unix(forecastData.daily[i].dt).format("DD/MM/YYYY"),
+      date: moment.unix(forecastData.daily[i].dt).format("DD-MM-YYYY"),
       weatherCondition: forecastData.daily[i].weather[0].main,
       weatherIcon: forecastData.daily[i].weather[0].icon,
       temperature: toCelsius(forecastData.daily[i].temp.day),
