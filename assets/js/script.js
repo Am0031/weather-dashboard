@@ -39,7 +39,7 @@ Please enter a valid city name.
 </button>
 </form>`;
 
-const searchHistoryBase = `<div class="search-history mt-3" id="search-history">
+const searchHistoryBase = `<div class="search-history mt-5" id="search-history">
 <h2>Search History</h2>
 <ul class="search-list p-0" id="search-list">
 </ul>
@@ -158,7 +158,7 @@ const renderCurrentData = (currentInfo) => {
   class="weather-title d-flex ml-1 mr-1 mt-3 mb-3"
   id="weather-title"
 >
-  <div class="flag d-flex flex-row align-items-center">
+  <div class="flag d-flex flex-row align-items-center my-2">
     <img src="${flagUrl}" />
     <h2 class="town pl-3 pr-3 text-uppercase font-weight-bold mb-0">
       ${currentInfo.name}
@@ -174,7 +174,7 @@ const renderCurrentData = (currentInfo) => {
   id="current-weather"
 >
   <div class="card-header d-flex">
-    <h3 class="card-date">${currentInfo.date}</h3>
+    <h3 class="card-date text-center">${currentInfo.date}</h3>
     <h3 class="card-text icon-text">${currentInfo.weatherCondition}</h3>
   </div>
   <div class="card-body d-flex">
