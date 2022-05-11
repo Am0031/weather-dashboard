@@ -82,7 +82,7 @@ const removeContainer = (containerId) => {
 };
 
 const toCelsius = (fahrenheit) => {
-  return (((fahrenheit - 32) * 5) / 9).toFixed(3);
+  return (((fahrenheit - 32) * 5) / 9).toFixed(2);
 };
 //END UTILITY FUNCTIONS
 
