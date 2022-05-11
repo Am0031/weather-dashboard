@@ -371,7 +371,7 @@ const handleFormClick = async (event) => {
   event.stopPropagation();
   event.preventDefault();
   //check input from input field
-  const input = $("#input-field").val().toLowerCase();
+  const input = $("#input-field").val().toLowerCase().trim();
   //if empty or invalid, change class/render alert message
   if (!input || !/^[A-Za-z\s]*$/.test(input)) {
     highlightInputField();
