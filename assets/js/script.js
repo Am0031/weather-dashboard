@@ -10,36 +10,15 @@ let flagUrl = "";
 
 let letterInput = true;
 
-const searchAlertMessage = `<form class="search-form d-flex flex-column" id="search-form">
-<label class="input-label h2" for="input">Search for a city</label>
-<input
-  class="search-input"
-  type="text"
-  name="inputField"
-  id="input-field"
-  placeholder="Enter a city"
-  aria-label="Enter a city"
-/>
-<p class="invalid-input-message w-100 mt-2 mb-2 text-center invisible" id="invalid-input">
-Please enter a valid city name.
-</p>
-<button
-  class="btn btn-info mt-2 mb-2 search-btn"
-  id="search-btn"
-  type="button"
->
-  Search
-</button>
-</form>
-<div class="search-history mt-3" id="search-history">
+const searchAlertMessage = `<div class="search-history mt-3" id="search-history">
 <h2>Recent searches</h2>
-<div class="alert-message w-100 mt-2 mb-2 text-center">
+<div class="alert-message alert-warning w-100 mt-2 mb-2 text-center">
 No previous searches.
 </div>
 </div>`;
 
-const searchContainerBase = `<form class="search-form d-flex flex-column" id="search-form">
-<label class="input-label h2" for="input">Search for a city</label>
+const searchFormBase = `<form class="search-form d-flex flex-column" id="search-form">
+<label class="input-label h2" for="input">Search form</label>
 <input
   class="search-input"
   type="text"
@@ -54,25 +33,26 @@ Please enter a valid city name.
 <button
   class="btn btn-info mt-2 mb-2 search-btn"
   id="search-btn"
-  type="button"
+  type="submit"
 >
   Search
 </button>
-</form>
-<div class="search-history mt-3" id="search-history">
-<h2>Recent searches</h2>
+</form>`;
+
+const searchHistoryBase = `<div class="search-history mt-3" id="search-history">
+<h2>Search History</h2>
 <ul class="search-list p-0" id="search-list">
 </ul>
 </div>`;
 
 const clearBtn = `<button
-class="btn btn-warning w-100 mt-2 mb-2 clear-btn"
+class="btn btn-danger w-100 mt-2 mb-2 clear-btn"
 id="clear-btn" type="button"
 >
 Clear searches
 </button>`;
 
-const weatherAlertMessage = `<div class="alert-message w-100 mt-2 mb-2 text-center">
+const weatherAlertMessage = `<div class="alert-message alert-warning w-100 mt-2 mb-2 text-center">
 No previous searches.
 </div>`;
 
@@ -97,9 +77,8 @@ const clearLS = () => {
   localStorage.clear();
 };
 
-const emptyContainer = (containerId) => {
-  $(`#${containerId}`).empty();
-  $(`#${containerId}`).off("click");
+const removeContainer = (containerId) => {
+  $(`#${containerId}`).remove();
 };
 
 const toCelsius = (fahrenheit) => {
@@ -355,12 +334,10 @@ const addCityToSearchList = (value) => {
       listCitiesFromLS.push(value);
       writeToLS("listCities", listCitiesFromLS);
       //empty search list container
-      const containerId = "search-container";
-      emptyContainer(containerId);
+      const containerId = "search-history";
+      removeContainer(containerId);
       //render search list
       renderSearchList(listCitiesFromLS);
-    } else {
-      console.log("City is already in saved list");
     }
   }
   //set up new array, push value in array and set into local storage
@@ -369,8 +346,8 @@ const addCityToSearchList = (value) => {
     newListCities.push(value);
     writeToLS("listCities", newListCities);
     //empty search list container
-    const containerId = "search-container";
-    emptyContainer(containerId);
+    const containerId = "search-history";
+    removeContainer(containerId);
     //render search list
     renderSearchList(newListCities);
   }
@@ -390,10 +367,11 @@ const highlightInputField = () => {
   $("#input-field").keyup(handleInputChange);
 };
 
-const handleFormClick = async () => {
+const handleFormClick = async (event) => {
+  event.stopPropagation();
+  event.preventDefault();
   //check input from input field
   const input = $("#input-field").val().toLowerCase();
-  console.log(input);
   //if empty or invalid, change class/render alert message
   if (!input || !/^[A-Za-z\s]*$/.test(input)) {
     highlightInputField();
@@ -408,8 +386,6 @@ const handleFormClick = async () => {
   }
 };
 const handleCityClick = (value) => {
-  //if click if from city in saved list
-  console.log("handling city click");
   //render Weather data
   renderWeatherData(value);
 };
@@ -418,8 +394,8 @@ const handleClearClick = () => {
   //if click from clear button, clear LS + empty search list + render search list
   clearLS();
   //empty search list container
-  const containerId = "search-container";
-  emptyContainer(containerId);
+  const containerId = "search-history";
+  removeContainer(containerId);
   //render search list
   renderSearchList();
 };
@@ -431,14 +407,8 @@ const handleClick = (event) => {
 
   //if click from a button then check which button
   if (target.is("button")) {
-    //if button from search form, then go to handleFormSubmit
-    if (targetId == "search-btn") {
-      handleFormClick();
-    }
     //if button from search list, then go to handleClearClick
-    else {
-      handleClearClick();
-    }
+    handleClearClick();
   }
   //if click from cities list, then go to handleCityClick
   else if (target.is("li")) {
@@ -453,12 +423,17 @@ const renderSearchList = (search) => {
   }
   //else render list items
   else {
-    $("#search-container").append(searchContainerBase);
+    $("#search-container").append(searchHistoryBase);
     search.forEach(renderListItem);
     $("#search-history").append(clearBtn);
   }
   //add event listener to search container
-  $("#search-container").click(handleClick);
+  $("#search-history").click(handleClick);
+};
+
+const renderSearchForm = () => {
+  $("#search-container").append(searchFormBase);
+  $("#search-form").click(handleFormClick);
 };
 
 const renderWeatherContainer = async (search) => {
@@ -478,6 +453,8 @@ const renderWeatherContainer = async (search) => {
 const onReady = async () => {
   //check local storage
   const existingLS = getFromLS("listCities");
+  //render search form
+  renderSearchForm();
   //render recent search container
   renderSearchList(existingLS);
   //render weather container (add function call to test rendering)
