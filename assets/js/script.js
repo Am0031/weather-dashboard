@@ -449,16 +449,67 @@ const renderWeatherContainer = async (search) => {
   }
 };
 
+const renderUserLocationData = async (userLocation) => {
+  try {
+    //extract lon and lat from user ip info
+    const coordinates = getCoordinates(userLocation);
+    const cityName = userLocation.name;
+
+    //call api and wait for response (await)
+    const forecastData = await getForecastFromApi(coordinates);
+
+    //from response, cherry pick relevant data for current weather
+    const currentInfo = gatherCurrentInfo(cityName, forecastData);
+
+    //from response, cherry pick relevant data for forecast
+    const forecastInfo = gatherForecastInfo(forecastData);
+
+    //from response, extract country code for flag
+    getCountryFlag(userLocation.country);
+
+    //empty weather container
+    $("#weather-container").empty();
+
+    //render current weather data (weather title and current weather divs)
+    renderCurrentData(currentInfo);
+    //render forecast data (forecast container)
+    renderForecastData(forecastInfo);
+
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+const getUserLocation = async () => {
+  const ipAddress = await (
+    await fetch("https://geolocation-db.com/json/")
+  ).json();
+  const userLocation = {
+    name: ipAddress.city,
+    country: ipAddress.country_code,
+    coord: {
+      lat: ipAddress.latitude,
+      lon: ipAddress.longitude,
+    },
+  };
+  return userLocation;
+};
+
 //Main function
 const onReady = async () => {
   //check local storage
   const existingLS = getFromLS("searchCities");
+
   //render search form
   renderSearchForm();
   //render recent search container
   renderSearchList(existingLS);
-  //render weather container (add function call to test rendering)
-  await renderWeatherContainer(existingLS);
+
+  //get ip address info for user location
+  const userLocation = await getUserLocation();
+  //render weather container based on user current location
+  await renderUserLocationData(userLocation);
 };
 
 //On page load
