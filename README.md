@@ -13,6 +13,29 @@ When opening the page, the user is presented with a search form and search histo
 The user can use the search form to look for a city by name. When they submit the form, the right hand side of the page updates with the weather data of the submitted city. This city is also saved to local storage and added to the user's search list and appears in the updated search history. If the user wants to view the weather data for one of their search history cities, they can click on the city name and the weather data section is updated accordingly.
 When the user clicks on the clear button under the search history list, the local storage is cleared and the search history section is updated to display a message indicating that there is no search history.
 
+## Screenshots of the live page
+
+<details>
+<summary>Desktop viewport - page on load Example for a user in New York</summary>
+
+![Desktop viewport - page on load Example for a user in New York](./assets/screenshots/livepage-onload.png)
+
+</details>
+
+<details>
+<summary>Desktop viewport - page with search history list</summary>
+
+![Desktop viewport - page with search history list](./assets/screenshots/livepage-withsavedsearch.png)
+
+</details>
+
+<details>
+<summary>Mobile viewport - full page</summary>
+
+![Mobile viewport - full page](./assets/screenshots/livepage-mobile.png)
+
+</details>
+
 ## Steps followed for the development of the page
 
 To tackle this project, the following steps were taken:
