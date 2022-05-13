@@ -10,6 +10,7 @@ let flagUrl = "";
 
 let letterInput = true;
 
+//Variables for container and divs rendering
 const searchAlertMessage = `<div class="search-history mt-3" id="search-history">
 <h2>Recent searches</h2>
 <div class="warning-message alert-warning w-100 mt-2 mb-2 text-center">
@@ -59,9 +60,6 @@ No previous searches.
 const invalidInputMessage = `<div class="alert-message w-100 mt-2 mb-2 text-center" id="invalid-input">
 Please enter a valid city name.
 </div>`;
-
-let currentWeatherFromApi;
-let forecastWeatherFromApi;
 
 //UTILITY FUNCTIONS
 
@@ -116,7 +114,7 @@ const getForecastFromApi = async (coordinates) => {
     const response = await fetch(fullUrl);
     if (response.ok) {
       const data = await response.json();
-      console.log(data);
+
       return data;
     } else {
       throw new Error("Failed to get forecast data");
@@ -126,7 +124,7 @@ const getForecastFromApi = async (coordinates) => {
   }
 };
 
-//Functions
+//Function to get uvi class
 const getUviClass = (data) => {
   //checkuvi index with iff statement
   if (data < 3) {
@@ -142,7 +140,9 @@ const getUviClass = (data) => {
   }
 };
 
+//Functions to render parts on the page
 const renderListItem = (each) => {
+  //render history list items using template string
   const display = each.toUpperCase();
   $("#search-list").append(`<li
   class="btn btn-outline-info w-100 mt-2 mb-2 text-center"
@@ -153,7 +153,7 @@ const renderListItem = (each) => {
 };
 
 const renderCurrentData = (currentInfo) => {
-  //render current data with info passed
+  //render current data with info passed using template string
   $("#weather-container").append(`<div
   class="weather-title d-flex ml-1 mr-1 mt-3 mb-3"
   id="weather-title"
@@ -201,7 +201,7 @@ const renderCurrentData = (currentInfo) => {
 };
 
 const renderForecastData = (forecastInfo) => {
-  //render forecast data with info passed
+  //render forecast data with info passed using template string
   $("#weather-container")
     .append(`<div class="forecast-container" id="forecast-container">
   <h2 class="forecast-title pl-3 pr-3">5-Day Forecast</h2> <div
@@ -240,6 +240,7 @@ const renderForecastData = (forecastInfo) => {
   forecastInfo.forEach(renderForecastCard);
 };
 
+//Functions to extract information from the API response
 const getCoordinates = (weatherData) => {
   const coordinates = {
     lat: weatherData.coord.lat,
@@ -266,28 +267,30 @@ const gatherCurrentInfo = (cityName, data) => {
   return currentInfo;
 };
 
-const gatherForecastInfo = (forecastData) => {
+const gatherForecastInfo = (data) => {
   const forecast = [];
   for (let i = 1; i < 6; i += 1) {
     const forecastItem = {
-      date: moment.unix(forecastData.daily[i].dt).format("DD-MM-YYYY"),
-      weatherCondition: forecastData.daily[i].weather[0].main,
-      weatherIcon: forecastData.daily[i].weather[0].icon,
-      temperature: toCelsius(forecastData.daily[i].temp.day),
-      humidity: forecastData.daily[i].humidity,
-      windSpeed: forecastData.daily[i].wind_speed,
-      uvi: forecastData.daily[i].uvi,
+      date: moment.unix(data.daily[i].dt).format("DD-MM-YYYY"),
+      weatherCondition: data.daily[i].weather[0].main,
+      weatherIcon: data.daily[i].weather[0].icon,
+      temperature: toCelsius(data.daily[i].temp.day),
+      humidity: data.daily[i].humidity,
+      windSpeed: data.daily[i].wind_speed,
+      uvi: data.daily[i].uvi,
     };
     forecast.push(forecastItem);
   }
   return forecast;
 };
 
-const getCountryFlag = (countryCode) => {
+//Function to build the country flag url
+const getCountryFlagUrl = (countryCode) => {
   //pass country code to build url
   flagUrl = `${flagBaseUrl}${countryCode}`;
 };
 
+//Async function - Main function to gather and render the weather data inside the weather container
 const renderWeatherData = async (data) => {
   try {
     //call api and wait for response (await)
@@ -307,7 +310,7 @@ const renderWeatherData = async (data) => {
     const forecastInfo = gatherForecastInfo(forecastData);
 
     //from response, extract country code for flag
-    getCountryFlag(weatherData.sys.country);
+    getCountryFlagUrl(weatherData.sys.country);
 
     //empty weather container
     $("#weather-container").empty();
@@ -323,6 +326,7 @@ const renderWeatherData = async (data) => {
   //add true/false return for use in not adding it to the search list if false
 };
 
+//Function to add search city to the search history list
 const addCityToSearchList = (value) => {
   //get search list from local storage
 
@@ -353,6 +357,7 @@ const addCityToSearchList = (value) => {
   }
 };
 
+//Functions to handle submission of an empty input field and flag it to the user
 const handleInputChange = () => {
   const target = $(event.target);
   if (target.hasClass("is-invalid")) {
@@ -367,11 +372,13 @@ const highlightInputField = () => {
   $("#input-field").keyup(handleInputChange);
 };
 
+//Functions to handle the different clicks on the page
 const handleFormClick = async (event) => {
   event.stopPropagation();
   event.preventDefault();
+  const inputField = $("#input-field");
   //check input from input field
-  const input = $("#input-field").val().toLowerCase().trim();
+  const input = inputField.val().toLowerCase().trim();
   //if empty or invalid, change class/render alert message
   if (!input || !/^[A-Za-z\s]*$/.test(input)) {
     highlightInputField();
@@ -384,6 +391,7 @@ const handleFormClick = async (event) => {
       highlightInputField();
     }
   }
+  inputField.val("");
 };
 const handleCityClick = (value) => {
   //render Weather data
@@ -416,6 +424,7 @@ const handleClick = (event) => {
   }
 };
 
+//Function to render the search history list
 const renderSearchList = (search) => {
   //if local storage is empty, then render alert message
   if (!search) {
@@ -431,11 +440,13 @@ const renderSearchList = (search) => {
   $("#search-history").click(handleClick);
 };
 
+//Function to render the search form on load of page
 const renderSearchForm = () => {
   $("#search-container").append(searchFormBase);
   $("#search-form").click(handleFormClick);
 };
 
+//Async function - Function to render the weather container
 const renderWeatherContainer = async (search) => {
   //if local storage is empty, then render alert message
   if (!search) {
@@ -449,6 +460,7 @@ const renderWeatherContainer = async (search) => {
   }
 };
 
+//Async function - Function to gather and render the user's current location's data in the weather container
 const renderUserLocationData = async (userLocation) => {
   try {
     //extract lon and lat from user ip info
@@ -465,7 +477,7 @@ const renderUserLocationData = async (userLocation) => {
     const forecastInfo = gatherForecastInfo(forecastData);
 
     //from response, extract country code for flag
-    getCountryFlag(userLocation.country);
+    getCountryFlagUrl(userLocation.country);
 
     //empty weather container
     $("#weather-container").empty();
@@ -481,6 +493,7 @@ const renderUserLocationData = async (userLocation) => {
   }
 };
 
+//Async function - Function to get the user's current location from their IP address and extract lat and lon info
 const getUserLocation = async () => {
   const ipAddress = await (
     await fetch("https://geolocation-db.com/json/")
@@ -496,7 +509,7 @@ const getUserLocation = async () => {
   return userLocation;
 };
 
-//Main function
+//Async Main function - on load of page
 const onReady = async () => {
   //check local storage
   const existingLS = getFromLS("searchCities");
