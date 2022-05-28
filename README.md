@@ -1,7 +1,9 @@
-# weather-dashboard
+# Weather dashboard
 
-This project is about developing a weather app which allows you to search for a city by name and see the current weather and the 5 day forecast for that city.
-This project uses the OpenWeatherMap API to gather the city's current weather data and forecast data.
+## Summary of the project
+
+This project is about developing a weather app which allows the user to search for a city by name and see the current weather and the 5 day forecast for that city. The user's search history is saved and displayed, and cities can be selected and viewed again from that list, and the user can also clear the list.
+This project is built with HTML, CSS and JS, and using jQuery and bootstrap. It uses the OpenWeatherMap API to gather the city's current weather data and forecast data. It also uses geolocation api (for user location) and country flags api for display purposes.
 
 Deployed URL : [ https://am0031.github.io/weather-dashboard/](https://am0031.github.io/weather-dashboard/)
 
