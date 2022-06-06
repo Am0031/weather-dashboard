@@ -1,0 +1,181 @@
+/*General styling for the whole page - root variables*/
+:root {
+  --extra-dark: #112b3c;
+  --dark: #1c658c;
+  --medium: #398ab9;
+  --light: #d8d2cb;
+  --extra-light: #eeeeee;
+  --alert: #fae5a5;
+  --invalid: crimson;
+  --uvi-low: green;
+  --uvi-moderate: yellow;
+  --uvi-high: orange;
+  --uvi-very-high: crimson;
+  --uvi-extreme: rgb(155, 14, 42);
+}
+
+/*General styling for the whole page - root variables*/
+body {
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  min-height: 100vh;
+}
+li {
+  list-style: none;
+}
+
+/*Header and Footer styles*/
+.header-banner {
+  height: 90px;
+  width: 100%;
+  background-image: url(../images/weather-banner.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.header-title,
+.footer,
+.contact-link-text {
+  background-color: var(--dark);
+  color: var(--extra-light);
+}
+
+/*Main section styles*/
+
+/*Main section flex properties - defined here instead of with bootstrap classes so they can change for mobile view port*/
+.main {
+  display: flex;
+  flex-direction: row;
+  flex: 2;
+}
+
+.warning-message {
+  padding: 2rem 0 2rem 0;
+}
+
+.search-container {
+  width: 20%;
+}
+.is-invalid {
+  border-color: var(--invalid);
+}
+.invalid-input-message {
+  color: var(--invalid);
+  font-size: 0.6rem;
+  font-style: italic;
+}
+
+/*Main section styles - Search history*/
+.search-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/*Main section styles - Weather section*/
+.weather-container {
+  flex: 1;
+}
+.weather-title {
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.weather-text {
+  text-align: center;
+}
+.flag {
+  height: 2rem;
+}
+.flag img {
+  height: 100%;
+}
+.card-icon {
+  max-height: 8rem;
+}
+.card-body {
+  flex-direction: row-reverse;
+}
+.card-header {
+  flex-direction: row;
+}
+.card-icon,
+.icon-text {
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.card-info {
+  width: 35%;
+  text-align: left;
+}
+.img-icon {
+  height: 100%;
+}
+.forecast {
+  flex: 1;
+}
+.forecast-title {
+  text-align: right;
+}
+.forecast-card {
+  flex: 1;
+  min-width: 10rem;
+}
+
+/*Colour coding for UV Index*/
+.uvi-low {
+  background-color: var(--uvi-low);
+  color: var(--extra-light);
+}
+.uvi-moderate {
+  background-color: var(--uvi-moderate);
+  color: var(--extra-dark);
+}
+.uvi-high {
+  background-color: var(--uvi-high);
+  color: var(--extra-dark);
+}
+.uvi-very-high {
+  background-color: var(--uvi-very-high);
+  color: var(--extra-light);
+}
+.uvi-extreme {
+  background-color: var(--uvi-extreme);
+  color: var(--extra-light);
+}
+
+/*Media query for mobile screens*/
+@media screen and (max-width: 590px) {
+  .header-title {
+    font-size: 2rem;
+  }
+  .main {
+    padding: 0;
+  }
+  .main,
+  .card-body,
+  .card-header {
+    flex-direction: column;
+  }
+  .card-info {
+    width: 100%;
+    text-align: center;
+  }
+  .search-container {
+    width: auto;
+  }
+
+  .forecast-title {
+    text-align: center;
+  }
+  .weather-title {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .flag {
+    justify-content: center;
+  }
+}

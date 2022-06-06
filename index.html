@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Weather Dashboard</title>
+    <!--Link to Bootstrap api-->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.1/css/bootstrap.min.css"
+    />
+    <!--Link to fontawesome api-->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+      crossorigin="anonymous"
+    />
+    <!--Link to Google fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <!--Link to author CSS stylesheet-->
+    <link rel="stylesheet" href="./assets/css/styles.css" />
+  </head>
+  <body class="d-flex flex-column">
+    <header class="header">
+      <div class="header-banner"></div>
+      <h1 class="header-title text-center p-3 mb-0">Weather Dashboard</h1>
+    </header>
+    <main class="main pl-3 pr-3" id="main">
+      <section class="search-container p-2 m-3" id="search-container">
+        <!--Content to be rendered with JS-->
+      </section>
+      <section class="weather-container m-3" id="weather-container">
+        <!--Content to be rendered with JS-->
+      </section>
+    </main>
+    <footer class="footer p-3">
+      <div class="contact-link w-100 text-center mb-2">
+        <a class="contact-link-text" href="mailto:amelie.pira@gmail.com"
+          ><i class="fa-regular fa-envelope"></i> Contact us
+        </a>
+      </div>
+      <div class="footer-text w-100 text-center">&copy; 2022 - Amelie Pira</div>
+    </footer>
+    <!--Link to jquery api-->
+
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.js"
+      integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+      crossorigin="anonymous"
+    ></script>
+    <!--Link to moment js api-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment.min.js"></script>
+    <!--Link to author js file-->
+    <script src="./assets/js/script.js"></script>
+  </body>
+</html>
