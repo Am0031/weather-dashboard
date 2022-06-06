@@ -17,12 +17,9 @@ When the user clicks on the clear button under the search history list, the loca
 
 ## Screenshots of the live page
 
-<details>
-<summary>Desktop viewport - page on load Example for a user in New York</summary>
+Desktop viewport - page on load Example for a user in New York:
 
 ![Desktop viewport - page on load Example for a user in New York](./assets/screenshots/livepage-onload.png)
-
-</details>
 
 <details>
 <summary>Desktop viewport - page with search history list</summary>
