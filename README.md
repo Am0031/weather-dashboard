@@ -60,11 +60,11 @@ The following diagrams show the logic of the page for on load event and click ev
 
 On load of page:
 
-![On load of the page](./assets/screenshots/logic-onLoad.png)
+![On load of the page](./assets/screenshots/logic-onload.png)
 
 On click of search form:
 
-![On search form click](./assets/screenshots/logic-onFromClick.png)
+![On search form click](./assets/screenshots/logic-onFormClick.png)
 
 On click of city name in search history list:
 
