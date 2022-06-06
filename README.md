@@ -21,19 +21,11 @@ Desktop viewport - page on load Example for a user in New York:
 
 ![Desktop viewport - page on load Example for a user in New York](./assets/screenshots/livepage-onload.png)
 
-<details>
-<summary>Desktop viewport - page with search history list</summary>
+Desktop viewport - page with search history list:
 
 ![Desktop viewport - page with search history list](./assets/screenshots/livepage-withsavedsearch.png)
 
-</details>
-
-<details>
-<summary>Mobile viewport - full page</summary>
-
-![Mobile viewport - full page](./assets/screenshots/livepage-mobile.png)
-
-</details>
+Mobile viewport - full page available [here](./assets/screenshots/livepage-mobile.png)
 
 ## Steps followed for the development of the page
 
@@ -66,42 +58,27 @@ See below the general layout of the page:
 
 The following diagrams show the logic of the page for on load event and click events:
 
-<details>
-<summary>On load of page</summary>
+On load of page:
 
 ![On load of the page](./assets/screenshots/logic-onLoad.png)
 
-</details>
-
-<details>
-<summary>On click of search form</summary>
+On click of search form:
 
 ![On search form click](./assets/screenshots/logic-onFromClick.png)
 
-</details>
-
-<details>
-<summary>On click of city name in search history list</summary>
+On click of city name in search history list:
 
 ![On search list city click](./assets/screenshots/logic-onCityClick.png)
 
-</details>
-
-<details>
-<summary>On click of clear button under search history</summary>
+On click of clear button under search history:
 
 ![On search list city click](./assets/screenshots/logic-onClearClick.png)
 
-</details>
-
-<details>
-<summary>Additional details for key functions</summary>
+Additional details for key functions:
 
 ![On search list city click](./assets/screenshots/function-renderUserLocationData.png)
 ![On search list city click](./assets/screenshots/function-renderSearchList.png)
 ![On search list city click](./assets/screenshots/function-renderWeatherData.png)
-
-</details>
 
 A full print out of the logic is available [here](./weather-dashobard-wireframe-logic.pdf)
 
