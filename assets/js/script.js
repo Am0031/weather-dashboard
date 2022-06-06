@@ -34,7 +34,7 @@ const searchFormBase = `<form class="search-form d-flex flex-column" id="search-
 Please enter a valid city name.
 </p>
 <button
-  class="btn btn-info mt-2 mb-2 search-btn"
+  class="btn btn-secondary mt-2 mb-2 search-btn"
   id="search-btn"
   type="submit"
 >
