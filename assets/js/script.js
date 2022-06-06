@@ -11,6 +11,7 @@ let flagUrl = "";
 let letterInput = true;
 
 //Variables for container and divs rendering
+
 const searchAlertMessage = `<div class="search-history mt-3" id="search-history">
 <h2>Recent searches</h2>
 <div class="warning-message alert-warning w-100 mt-2 mb-2 text-center">
@@ -23,6 +24,7 @@ const searchFormBase = `<form class="search-form d-flex flex-column" id="search-
 <input
   class="search-input"
   type="text"
+  minlength="1"
   name="inputField"
   id="input-field"
   placeholder="Enter a city"
@@ -54,11 +56,7 @@ Clear searches
 </button>`;
 
 const weatherAlertMessage = `<div class="warning-message alert-warning w-100 mt-2 mb-2 text-center">
-No previous searches.
-</div>`;
-
-const invalidInputMessage = `<div class="alert-message w-100 mt-2 mb-2 text-center" id="invalid-input">
-Please enter a valid city name.
+The system failed to retrieve the data. Please try another city name.
 </div>`;
 
 //UTILITY FUNCTIONS
@@ -359,7 +357,7 @@ const addCityToSearchList = (value) => {
 
 //Functions to handle submission of an empty input field and flag it to the user
 const handleInputChange = () => {
-  const target = $(event.target);
+  const target = $("#input-field");
   if (target.hasClass("is-invalid")) {
     target.removeClass("is-invalid");
     $("#invalid-input").addClass("invisible");
@@ -379,21 +377,27 @@ const handleFormClick = async (event) => {
   const inputField = $("#input-field");
   //check input from input field
   const input = inputField.val().toLowerCase().trim();
+  const validInput = /^[A-Za-z\s]*$/.test(input);
   //if empty or invalid, change class/render alert message
-  if (!input || !/^[A-Za-z\s]*$/.test(input)) {
-    highlightInputField();
+  if (!validInput) {
+    highlightInputField(event);
+    renderWeatherAlert();
   } else {
     const result = await renderWeatherData(input);
     //add city name to search list only iof rendering went well
     if (result) {
       addCityToSearchList(input);
     } else {
-      highlightInputField();
+      highlightInputField(event);
+      renderWeatherAlert();
     }
   }
   inputField.val("");
 };
+
 const handleCityClick = (value) => {
+  $("#invalid-input").addClass("invisible");
+  $("#input-field").removeClass("is-invalid");
   //render Weather data
   renderWeatherData(value);
 };
@@ -443,21 +447,13 @@ const renderSearchList = (search) => {
 //Function to render the search form on load of page
 const renderSearchForm = () => {
   $("#search-container").append(searchFormBase);
-  $("#search-form").click(handleFormClick);
+  $("#search-form").submit(handleFormClick);
 };
 
 //Async function - Function to render the weather container
-const renderWeatherContainer = async (search) => {
-  //if local storage is empty, then render alert message
-  if (!search) {
-    $("#weather-container").append(weatherAlertMessage);
-  }
-  //else extract last city in array
-  else {
-    const last = search[search.length - 1];
-    //render weather data for last city in list
-    await renderWeatherData(last);
-  }
+const renderWeatherAlert = async () => {
+  $("#weather-container").empty();
+  $("#weather-container").append(weatherAlertMessage);
 };
 
 //Async function - Function to gather and render the user's current location's data in the weather container
